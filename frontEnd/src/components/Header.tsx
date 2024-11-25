@@ -14,10 +14,13 @@ const Header = () => {
     }
     const { toggleTheme, isDarkMode } = themeContext;
 
-    const { editor } = useEditorContext();
+    const { editorState } = useEditorContext();
+
+    const { title, content } = editorState || {};
 
     function publishData() {
-        console.log(editor);
+        console.log(content);
+        console.log(title);
     }
 
     return (

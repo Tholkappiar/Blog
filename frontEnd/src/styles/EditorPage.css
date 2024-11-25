@@ -190,3 +190,7 @@ textarea.is-active:hover {
     margin: none;
     transition: all 0.2s cubic-bezier(0.65, 0.05, 0.36, 1);
 }
+
+.title::first-letter {
+    text-transform: uppercase;
+}

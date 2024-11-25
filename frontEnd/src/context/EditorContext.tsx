@@ -7,11 +7,14 @@ import React, {
     SetStateAction,
 } from "react";
 
-type EditorType = string;
+type EditorState = {
+    title: string;
+    content: string | null;
+};
 
 interface EditorContextType {
-    editor: EditorType | null;
-    setEditor: Dispatch<SetStateAction<EditorType | null>>;
+    editorState: EditorState;
+    setEditorState: Dispatch<SetStateAction<EditorState>>;
 }
 
 const EditorContext = createContext<EditorContextType | null>(null);
@@ -30,14 +33,16 @@ interface EditorProviderContextProps {
     children: ReactNode;
 }
 
-// Create the provider component
 export const EditorProviderContext: React.FC<EditorProviderContextProps> = ({
     children,
 }) => {
-    const [editor, setEditor] = useState<EditorType | null>(null);
+    const [editorState, setEditorState] = useState<EditorState>({
+        title: "",
+        content: null,
+    });
 
     return (
-        <EditorContext.Provider value={{ editor, setEditor }}>
+        <EditorContext.Provider value={{ editorState, setEditorState }}>
             {children}
         </EditorContext.Provider>
     );
