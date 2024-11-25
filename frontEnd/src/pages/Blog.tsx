@@ -1,11 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import AuthorCard from "../components/AuthorCard";
 import BlogDisplay from "../components/BlogDisplay";
-import {
-    AuthorCardShimmer,
-    BlogFullShimmer,
-} from "../components/BlogShimmerEffects";
+import { BlogFullShimmer } from "../components/BlogShimmerEffects";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import { API_ROUTES } from "../utils/apiEndpoints";
 
@@ -55,20 +51,12 @@ const Blog = () => {
     }
 
     return (
-        <div className="w-full max-w-7xl mx-auto p-4 py-8 flex flex-col lg:flex-row">
+        <div className="w-full max-w-3xl 3xl:max-w-7xl mx-auto p-4 py-8">
             {blog ? (
-                <>
-                    <BlogDisplay title={blog?.title} post={blog?.post} />
-                    <AuthorCard authorId={blog?.id || ""} />
-                </>
+                <BlogDisplay title={blog?.title} post={blog?.post} />
             ) : (
-                <>
-                    <BlogFullShimmer />
-                    <AuthorCardShimmer />
-                </>
+                <BlogFullShimmer />
             )}
-            {/* <BlogFullShimmer />
-            <AuthorCardShimmer /> */}
         </div>
     );
 };

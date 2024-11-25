@@ -1,19 +1,21 @@
 export function BlogCardShimmer() {
     return (
-        <article className="bg-card dark:bg-darkCard shadow rounded-lg p-6 mb-8 animate-pulse">
-            <h2 className="bg-darkTextMain dark:bg-textMain mb-2 p-2"></h2>
-            <p className="bg-darkTextMain dark:bg-textMain p-2 mb-4"></p>
-            <div className="flex gap-4">
-                <span className="bg-darkTextMain dark:bg-textMain p-2"></span>
-                <span className="bg-darkTextMain dark:bg-textMain p-2"></span>
-            </div>
-            <div className="mt-4 flex flex-wrap">
-                {[...Array(6)].map((_, index) => (
-                    <span
-                        key={index}
-                        className="bg-darkTextMain dark:bg-textMain rounded-full px-4 py-3 mr-2 mb-2"
-                    ></span>
-                ))}
+        <article className="rounded-lg p-6 mb-8 animate-pulse">
+            <h2 className="mb-2 p-2 w-full bg-textMain dark:bg-darkTextMain"></h2>
+            <p className="mb-4 p-2 w-full bg-textMain dark:bg-darkTextMain"></p>
+            <div className="flex">
+                <div className="my-2 flex gap-4">
+                    <span className="py-2 px-5 bg-textMain dark:bg-darkTextMain"></span>
+                    <span className="py-2 px-5 bg-textMain dark:bg-darkTextMain"></span>
+                </div>
+                <div className="flex flex-wrap gap-2 my-2 m-2">
+                    {[...Array(3)].map((_, index) => (
+                        <div
+                            key={index}
+                            className="p-2 bg-textMain dark:bg-darkTextMain px-4 py-2"
+                        ></div>
+                    ))}
+                </div>
             </div>
         </article>
     );
@@ -21,9 +23,9 @@ export function BlogCardShimmer() {
 
 export function BlogFullShimmer() {
     return (
-        <div className="lg:w-2/3 sm:p-4 py-8 animate-pulse">
+        <div className="sm:p-4 py-8 animate-pulse">
             <div className="p-3 mb-4 bg-darkTextMain dark:bg-textMain rounded"></div>
-            <p className="p-2 mb-4 w-1/2 bg-darkTextMain dark:bg-textMain rounded"></p>
+            <p className="p-2 mb-8 w-1/2 bg-darkTextMain dark:bg-textMain rounded"></p>
             {[...Array(6)].map((_, index) => (
                 <div
                     key={index}

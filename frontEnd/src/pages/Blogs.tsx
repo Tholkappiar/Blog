@@ -1,10 +1,6 @@
 import { useEffect, useState } from "react";
-import RecommendedTags from "../components/RecommendedTags";
 import BlogCard from "../components/BlogCard";
-import {
-    BlogCardShimmer,
-    RecommendedTagsShimmer,
-} from "../components/BlogShimmerEffects";
+import { BlogCardShimmer } from "../components/BlogShimmerEffects";
 import { API_ROUTES } from "../utils/apiEndpoints";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
@@ -51,39 +47,24 @@ const Blogs = () => {
     }
 
     return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div className="flex flex-col lg:flex-row">
-                <div className="lg:w-2/3 lg:pr-8">
-                    <h1 className="text-3xl font-bold text-primary dark:text-white mb-8">
-                        Latest Blog Posts
-                    </h1>
-                    {blogs.length ? (
-                        blogs.map((blog) => (
-                            <BlogCard
-                                key={blog.id}
-                                title={blog.title}
-                                content={blog.post}
-                                imageUrl={"blog.imageUrl"}
-                                authorId={blog.authorId}
-                                id={blog.id}
-                            />
-                        ))
-                    ) : (
-                        <BlogCardShimmer />
-                    )}
-                </div>
+        <div className="w-full max-w-4xl 3xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 font-mono">
+            <div className="">
+                <h1 className="text-3xl font-bold text-center text-primary dark:text-white mb-8">
+                    {"<ThBlog />"}
+                </h1>
                 {blogs.length ? (
-                    <RecommendedTags
-                        tags={[
-                            "Javascript",
-                            "Tech",
-                            "Socials",
-                            "Ruby",
-                            "Express",
-                        ]}
-                    />
+                    blogs.map((blog) => (
+                        <BlogCard
+                            key={blog.id}
+                            title={blog.title}
+                            content={blog.post}
+                            imageUrl={"blog.imageUrl"}
+                            authorId={blog.authorId}
+                            id={blog.id}
+                        />
+                    ))
                 ) : (
-                    <RecommendedTagsShimmer />
+                    <BlogCardShimmer />
                 )}
             </div>
         </div>

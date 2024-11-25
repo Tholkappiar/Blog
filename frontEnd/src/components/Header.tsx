@@ -7,7 +7,7 @@ import { useEditorContext } from "../context/EditorContext";
 
 const Header = () => {
     const location = useLocation();
-    const isEditorPage = location.pathname === "/post";
+    const isEditorPage = location.pathname === "/postt";
     const themeContext = useContext(ThemeContext);
     if (!themeContext) {
         throw new Error("ThemeContext must be used within a ThemeProvider");
@@ -24,41 +24,35 @@ const Header = () => {
     }
 
     return (
-        <>
-            <div
-                className={`border-b-2 dark:border-darkMuted flex ${
-                    isEditorPage
-                        ? "justify-between sm:justify-around"
-                        : "justify-between"
-                } p-4 px-4 sm:px-12 items-center`}
-            >
-                <Link to={"/blogs"}>
-                    <p className="font-Oranienbaum font-bold text-2xl mx-2 text-primary dark:text-darkPrimary">
-                        Medium
-                    </p>
-                </Link>
-                <div className="flex items-center space-x-4 sm:space-x-8">
-                    {isEditorPage && (
-                        <button
-                            className="bg-accentBackground text-accentText text-sm p-2 rounded-lg font-semibold hover:bg-hoverSuccessAccent"
-                            onClick={publishData}
-                        >
-                            Publish
-                        </button>
-                    )}
+        <div
+            className={`border-2 border-darkMuted flex ${
+                isEditorPage
+                    ? "justify-between sm:justify-around"
+                    : "justify-between"
+            } py-2 px-4 sm:px-12 items-center w-3/4 md:1/2 lg:w-1/3 mx-auto rounded-xl my-4`}
+        >
+            <Link to={"/blogs"}>
+                <p className="font-Oranienbaum font-bold text-2xl mx-2 text-primary dark:text-darkPrimary">
+                    Th
+                </p>
+            </Link>
+            <div className="flex items-center space-x-4 sm:space-x-8">
+                {isEditorPage && (
+                    <button
+                        className="bg-accentBackground text-accentText text-sm p-2 rounded-lg font-semibold hover:bg-hoverSuccessAccent"
+                        onClick={publishData}
+                    >
+                        Publish
+                    </button>
+                )}
 
-                    <img
-                        onClick={toggleTheme}
-                        src={isDarkMode ? moon : sun}
-                        className="text-textMain dark:text-darkMuted size-5"
-                    />
-
-                    <div className="rounded-full bg-orange-500 size-7 flex justify-center items-center">
-                        <p className="text-primary dark:text-darkPrimary">P</p>
-                    </div>
-                </div>
+                <img
+                    onClick={toggleTheme}
+                    src={isDarkMode ? moon : sun}
+                    className="text-textMain dark:text-darkMuted size-5"
+                />
             </div>
-        </>
+        </div>
     );
 };
 
