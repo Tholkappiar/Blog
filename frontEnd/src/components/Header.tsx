@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { ThemeContext } from "../context/ThemeContext";
 import sun from "../assets/svgs/sun.svg";
 import moon from "../assets/svgs/moon.svg";
+import { useEditorContext } from "../context/EditorContext";
 
 const Header = () => {
     const location = useLocation();
@@ -12,6 +13,12 @@ const Header = () => {
         throw new Error("ThemeContext must be used within a ThemeProvider");
     }
     const { toggleTheme, isDarkMode } = themeContext;
+
+    const { editor } = useEditorContext();
+
+    function publishData() {
+        console.log(editor);
+    }
 
     return (
         <>
@@ -31,7 +38,7 @@ const Header = () => {
                     {isEditorPage && (
                         <button
                             className="bg-accentBackground text-accentText text-sm p-2 rounded-lg font-semibold hover:bg-hoverSuccessAccent"
-                            onClick={() => console.log("Publish")}
+                            onClick={publishData}
                         >
                             Publish
                         </button>

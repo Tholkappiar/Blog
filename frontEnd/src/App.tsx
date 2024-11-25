@@ -12,6 +12,7 @@ import AuthProvider from "./context/AuthProvider";
 import PersistantLogin from "./Auth/PersistantLogin";
 import NotFound from "./pages/NotFound";
 import EditorPage from "./pages/EditorPage";
+import { EditorProviderContext } from "./context/EditorContext";
 
 function App() {
     return (
@@ -29,31 +30,42 @@ const AppContent = () => {
     return (
         <div className={`${isDarkMode ? "dark" : ""}`}>
             <div className="bg-background dark:bg-darkBackground dark:text-darkPrimary">
-                <AuthProvider>
-                    <BrowserRouter>
-                        <Routes>
-                            <Route element={<Layout />}>
-                                <Route path="/" element={<Home />} />
-                                <Route path="/login" element={<Login />} />
-                                <Route path="/signup" element={<Signup />} />
-                                <Route element={<PersistantLogin />}>
-                                    <Route element={<RequireAuth />}>
-                                        <Route
-                                            path="/blogs"
-                                            element={<Blogs />}
-                                        />
-                                        <Route
-                                            path="/blog/:id"
-                                            element={<Blog />}
-                                        />
+                <BrowserRouter>
+                    <AuthProvider>
+                        <EditorProviderContext>
+                            <Routes>
+                                <Route element={<Layout />}>
+                                    <Route path="/" element={<Home />} />
+                                    <Route path="/login" element={<Login />} />
+                                    <Route
+                                        path="/signup"
+                                        element={<Signup />}
+                                    />
+                                    <Route element={<PersistantLogin />}>
+                                        <Route element={<RequireAuth />}>
+                                            <Route
+                                                path="/blogs"
+                                                element={<Blogs />}
+                                            />
+                                            <Route
+                                                path="/blog/:id"
+                                                element={<Blog />}
+                                            />
+                                        </Route>
                                     </Route>
+                                    <Route
+                                        path="*"
+                                        element={<NotFound />}
+                                    ></Route>
+                                    <Route
+                                        path="/post"
+                                        element={<EditorPage />}
+                                    />
                                 </Route>
-                                <Route path="*" element={<NotFound />}></Route>
-                                <Route path="/post" element={<EditorPage />} />
-                            </Route>
-                        </Routes>
-                    </BrowserRouter>
-                </AuthProvider>
+                            </Routes>
+                        </EditorProviderContext>
+                    </AuthProvider>
+                </BrowserRouter>
             </div>
         </div>
     );

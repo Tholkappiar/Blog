@@ -1,14 +1,22 @@
 import { Color } from "@tiptap/extension-color";
 import ListItem from "@tiptap/extension-list-item";
 import TextStyle from "@tiptap/extension-text-style";
-import { EditorProvider, useCurrentEditor, BubbleMenu } from "@tiptap/react";
+import { BubbleMenu, useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import "../styles/EditorPage.css";
-import { useContext, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { ThemeContext } from "../context/ThemeContext";
-const MenuBar = () => {
-    const { editor } = useCurrentEditor();
+import {
+    EditorProviderContext,
+    useEditorContext,
+} from "../context/EditorContext";
+import { Editor } from "@tiptap/core";
 
+interface MenuBarProps {
+    editor: Editor | null;
+}
+
+const MenuBar: React.FC<MenuBarProps> = ({ editor }) => {
     if (!editor) {
         return null;
     }
@@ -165,9 +173,11 @@ const MenuBar = () => {
     );
 };
 
-const BubbleBar = () => {
-    const { editor } = useCurrentEditor();
+interface BubbleBarProps {
+    editor: Editor | null;
+}
 
+const BubbleBar: React.FC<BubbleBarProps> = ({ editor }) => {
     if (!editor) return null;
 
     return (
@@ -190,9 +200,9 @@ const BubbleBar = () => {
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                         className="lucide lucide-italic"
                     >
                         <line x1="19" x2="10" y1="4" y2="4" />
@@ -211,9 +221,9 @@ const BubbleBar = () => {
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                         className="lucide lucide-strikethrough"
                     >
                         <path d="M16 4H9a3 3 0 0 0-2.83 4" />
@@ -241,16 +251,7 @@ const extensions = [
 ];
 
 const content = `
-<h2>
-  Hi there,
-</h2>
-<p>
-  this is a <em>basic</em> example of <strong>Tiptap</strong>. Sure, there are all kind of basic text styles you’d probably expect from a text editor. But wait until you see the lists:
-</p>
-<ul>
-  <li>
-    That’s a bullet list with one …
-  </li>
+<h2>Hi there,</h2><p>this is a <em>basic</em> example of <strong>Tiptap</strong>. Sure, there are all kind of basic text styles you’d probably expect from a text editor. But wait until you see the lists:</p><ul><li><p>That’s a bullet list with one …</p></li></ul>
 `;
 
 const EditorPage = () => {
@@ -263,16 +264,29 @@ const EditorPage = () => {
         const theme = isDarkMode ? "dark" : "light";
         document.body.className = theme;
     }, [isDarkMode]);
+
+    const { setEditor } = useEditorContext();
+
+    const editor = useEditor({
+        extensions,
+        content,
+        onUpdate({ editor }) {
+            setEditor(JSON.stringify(editor?.getJSON()));
+        },
+    });
+
+    useEffect(() => {
+        setEditor(JSON.stringify(editor?.getJSON()));
+    }, []);
+
     return (
-        <div className="max-w-3xl 3xl:max-w-7xl mx-auto">
-            <EditorProvider
-                slotBefore={<MenuBar />}
-                extensions={extensions}
-                content={content}
-            >
-                <BubbleBar />
-            </EditorProvider>
-        </div>
+        <EditorProviderContext>
+            <div className="max-w-3xl 3xl:max-w-7xl mx-auto">
+                <MenuBar editor={editor} />
+                <EditorContent editor={editor} />
+                <BubbleBar editor={editor} />
+            </div>
+        </EditorProviderContext>
     );
 };
 
