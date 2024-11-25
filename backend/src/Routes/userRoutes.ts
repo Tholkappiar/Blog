@@ -2,7 +2,6 @@ import { Hono } from "hono";
 import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { sign, verify } from "hono/jwt";
-import { signinInputSchema, signupInputSchema } from "@tholkappiar/common";
 import {
     ACCESS_TOKEN_EXPIRATION,
     HttpStatus,
@@ -10,6 +9,7 @@ import {
 } from "../utils/utils";
 import { getCookie, setCookie } from "hono/cookie";
 import bcrypt from "bcryptjs";
+import { signinInputSchema, signupInputSchema } from "../zod/validation";
 
 export const userRoute = new Hono<{
     Bindings: {

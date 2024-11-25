@@ -1,12 +1,12 @@
 import { Context, Hono, Next } from "hono";
 import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
+import { HttpStatus } from "../utils/utils";
+import { authorizePostAccess, setId } from "../middleware/authMiddleware";
 import {
     createPostInputSchema,
     updatePostInputSchema,
-} from "@tholkappiar/common";
-import { HttpStatus } from "../utils/utils";
-import { authorizePostAccess, setId } from "../middleware/authMiddleware";
+} from "../zod/validation";
 
 export const blogRoute = new Hono<{
     Bindings: {
@@ -26,7 +26,7 @@ blogRoute
             datasourceUrl: c.env.DATABASE_URL,
         }).$extends(withAccelerate());
 
-        const { title, post, tags } = await c.req.json();
+        const { title, post, tags, excerpt } = await c.req.json();
         const id = c.get("userId");
 
         // Validate input schema
@@ -34,6 +34,7 @@ blogRoute
             title,
             post,
             tags,
+            excerpt,
         });
         if (!validation.success) {
             return c.json(
@@ -49,6 +50,7 @@ blogRoute
                 title,
                 post,
                 tags,
+                excerpt,
                 authorId: id,
             },
         });

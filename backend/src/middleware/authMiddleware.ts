@@ -58,7 +58,7 @@ export async function setId(c: Context, next: Next) {
                 HttpStatus.UNAUTHORIZED
             );
         }
-        c.set("userId", jwtVerify.id);
+        c.set("userId", jwtVerify.userId);
         await next();
     } catch (e) {
         return c.json(

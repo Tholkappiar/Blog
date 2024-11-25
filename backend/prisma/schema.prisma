@@ -25,6 +25,7 @@ model User {
 model Post {
   id String @id @default(cuid())
   title String
+  excerpt String
   post String
   tags String[]
   published Boolean @default(false)
