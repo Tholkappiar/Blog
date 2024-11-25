@@ -1,12 +1,11 @@
 import { Color } from "@tiptap/extension-color";
 import ListItem from "@tiptap/extension-list-item";
 import TextStyle from "@tiptap/extension-text-style";
-import { EditorProvider, useCurrentEditor } from "@tiptap/react";
+import { EditorProvider, useCurrentEditor, BubbleMenu } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import "../styles/EditorPage.css";
 import { useContext, useEffect } from "react";
 import { ThemeContext } from "../context/ThemeContext";
-
 const MenuBar = () => {
     const { editor } = useCurrentEditor();
 
@@ -15,7 +14,7 @@ const MenuBar = () => {
     }
 
     return (
-        <div className="control-group my-8">
+        <div className="control-group sticky top-0 bg-background dark:bg-darkBackground z-10 py-10">
             <div className="button-group px-4">
                 <button
                     onClick={() => editor.chain().focus().toggleBold().run()}
@@ -166,6 +165,67 @@ const MenuBar = () => {
     );
 };
 
+const BubbleBar = () => {
+    const { editor } = useCurrentEditor();
+
+    if (!editor) return null;
+
+    return (
+        <BubbleMenu editor={editor} tippyOptions={{ duration: 100 }}>
+            <div className="bubble-menu">
+                <button
+                    onClick={() => editor.chain().focus().toggleBold().run()}
+                    className={editor.isActive("bold") ? "is-active" : ""}
+                >
+                    B
+                </button>
+                <button
+                    onClick={() => editor.chain().focus().toggleItalic().run()}
+                    className={editor.isActive("italic") ? "is-active" : ""}
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="15"
+                        height="15"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        className="lucide lucide-italic"
+                    >
+                        <line x1="19" x2="10" y1="4" y2="4" />
+                        <line x1="14" x2="5" y1="20" y2="20" />
+                        <line x1="15" x2="9" y1="4" y2="20" />
+                    </svg>
+                </button>
+                <button
+                    onClick={() => editor.chain().focus().toggleStrike().run()}
+                    className={editor.isActive("strike") ? "is-active" : ""}
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="15"
+                        height="15"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        className="lucide lucide-strikethrough"
+                    >
+                        <path d="M16 4H9a3 3 0 0 0-2.83 4" />
+                        <path d="M14 12a4 4 0 0 1 0 8H6" />
+                        <line x1="4" x2="20" y1="12" y2="12" />
+                    </svg>
+                </button>
+            </div>
+        </BubbleMenu>
+    );
+};
+
 const extensions = [
     Color.configure({ types: [TextStyle.name, ListItem.name] }),
     StarterKit.configure({
@@ -204,12 +264,14 @@ const EditorPage = () => {
         document.body.className = theme;
     }, [isDarkMode]);
     return (
-        <div className="max-w-3xl 3xl:max-w-7xl mx-auto my-8 ">
+        <div className="max-w-3xl 3xl:max-w-7xl mx-auto">
             <EditorProvider
                 slotBefore={<MenuBar />}
                 extensions={extensions}
                 content={content}
-            ></EditorProvider>
+            >
+                <BubbleBar />
+            </EditorProvider>
         </div>
     );
 };
