@@ -8,7 +8,7 @@ interface Blog {
     title: string;
     post: string;
     authorId: string;
-    imageUrl: string;
+    excerpt: string;
     tags: string[];
     id: string;
 }
@@ -57,8 +57,9 @@ const Blogs = () => {
                         <BlogCard
                             key={blog.id}
                             title={blog.title}
+                            excerpt={blog.excerpt}
                             content={blog.post}
-                            imageUrl={"blog.imageUrl"}
+                            tags={blog.tags}
                             authorId={blog.authorId}
                             id={blog.id}
                         />

@@ -23,7 +23,7 @@ export const API_ROUTES: ApiRoutes = {
     BLOG: {
         GET_ALL_BLOGS: "/blog/getAllBlogs",
         GET_BLOG: (id: string) => `/blog/${id}`,
-        POST_BLOG: "/",
+        POST_BLOG: "/blog",
         UPDATE_BLOG: "/",
         DELETE_BLOG: "/",
     },

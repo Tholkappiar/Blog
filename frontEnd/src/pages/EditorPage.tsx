@@ -49,7 +49,7 @@ const EditorPage = () => {
 
     const editor = useEditor({
         extensions,
-        content: editorState.content || content,
+        content: editorState.post || content,
         onUpdate({ editor }) {
             setEditorState((prevState) => ({
                 ...prevState,
@@ -59,6 +59,7 @@ const EditorPage = () => {
     });
 
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+    const excerptRef = useRef<HTMLTextAreaElement | null>(null);
 
     const handleTitleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
         const value = event.target.value;
@@ -69,10 +70,19 @@ const EditorPage = () => {
         }));
     };
 
+    const handleExcerptChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+        const value = event.target.value;
+        const capitalized = value.charAt(0).toUpperCase() + value.slice(1);
+        setEditorState((prevState) => ({
+            ...prevState,
+            excerpt: capitalized,
+        }));
+    };
+
     useEffect(() => {
         setEditorState((prevState) => ({
             ...prevState,
-            content: JSON.stringify(editor?.getJSON()),
+            post: JSON.stringify(editor?.getJSON()),
         }));
 
         if (textareaRef.current) {
@@ -81,6 +91,21 @@ const EditorPage = () => {
             textareaRef.current.focus();
         }
     }, [editorState.title]);
+    useEffect(() => {
+        if (excerptRef.current) {
+            excerptRef.current.style.height = "auto";
+            excerptRef.current.style.height = `${excerptRef.current.scrollHeight}px`;
+            excerptRef.current.focus();
+        }
+    }, [editorState.excerpt]);
+
+    function handleTags(event: ChangeEvent<HTMLInputElement>) {
+        const tags = event.target.value.split(" ");
+        setEditorState((prev) => ({
+            ...prev,
+            tags: tags,
+        }));
+    }
 
     return (
         <EditorProviderContext>
@@ -91,10 +116,23 @@ const EditorPage = () => {
                     placeholder="Title"
                     onChange={handleTitleChange}
                     value={editorState.title || ""}
-                    className="outline-none resize-none bg-inherit md:my-5 px-4 text-2xl md:text-3xl lg:text-4xl text-primary dark:text-darkPrimary font-serif w-full title"
+                    className="outline-none resize-none bg-inherit px-4 text-2xl md:text-3xl lg:text-4xl text-primary dark:text-darkPrimary font-serif w-full"
+                />
+                <textarea
+                    ref={excerptRef}
+                    placeholder="Excerpt"
+                    onChange={handleExcerptChange}
+                    value={editorState.excerpt || ""}
+                    className="outline-none resize-none bg-inherit px-4 text-lg text-primary dark:text-darkPrimary font-serif w-full"
                 />
                 <EditorContent editor={editor} />
                 <BubbleBar editor={editor} />
+                <input
+                    type="text"
+                    placeholder="Tags"
+                    onChange={handleTags}
+                    className="bg-inherit md:my-5 px-4 text-lg text-primary dark:text-darkPrimary font-mono w-full border outline-none"
+                />
             </div>
         </EditorProviderContext>
     );

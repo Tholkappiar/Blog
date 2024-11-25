@@ -2,15 +2,14 @@ import { Link } from "react-router-dom";
 
 interface BlogCardProps {
     title: string;
+    excerpt: string;
     content: string;
     authorId: string;
-    imageUrl: string;
     id: string;
+    tags: string[];
 }
 
-const tags = ["AI", "Development", "Web", "JAVA"];
-
-const BlogCard = ({ title, content, id }: BlogCardProps) => {
+const BlogCard = ({ title, id, excerpt, tags }: BlogCardProps) => {
     return (
         <Link to={`/blog/${id}`} className="group">
             <article
@@ -21,7 +20,7 @@ const BlogCard = ({ title, content, id }: BlogCardProps) => {
                     {title}
                 </h2>
                 <p className="text-textMain dark:text-darkTextMain mb-4 text-sm line-clamp-2">
-                    {content}
+                    {excerpt}
                 </p>
                 <div className="flex flex-wrap items-center text-xs text-muted dark:text-darkMuted justify-between">
                     <div className="my-2">

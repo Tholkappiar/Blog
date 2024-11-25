@@ -4,10 +4,12 @@ import { ThemeContext } from "../context/ThemeContext";
 import sun from "../assets/svgs/sun.svg";
 import moon from "../assets/svgs/moon.svg";
 import { useEditorContext } from "../context/EditorContext";
+import { API_ROUTES } from "../utils/apiEndpoints";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 const Header = () => {
     const location = useLocation();
-    const isEditorPage = location.pathname === "/postt";
+    const isEditorPage = location.pathname === "/post";
     const themeContext = useContext(ThemeContext);
     if (!themeContext) {
         throw new Error("ThemeContext must be used within a ThemeProvider");
@@ -16,11 +18,17 @@ const Header = () => {
 
     const { editorState } = useEditorContext();
 
-    const { title, content } = editorState || {};
+    const { title, post, tags, excerpt } = editorState || {};
+    const axiosPrivate = useAxiosPrivate();
 
-    function publishData() {
-        console.log(content);
-        console.log(title);
+    async function publishData() {
+        const response = await axiosPrivate.post(API_ROUTES.BLOG.POST_BLOG, {
+            title,
+            post,
+            tags,
+            excerpt,
+        });
+        console.log(response);
     }
 
     return (
