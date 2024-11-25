@@ -3,6 +3,9 @@ export default {
     content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
     theme: {
         extend: {
+            screens: {
+                "3xl": "2500px",
+            },
             fontFamily: {
                 "koh-santepheap": ["Koh Santepheap", "serif"],
                 Oranienbaum: ["Oranienbaum", "serif"],
@@ -37,5 +40,5 @@ export default {
         },
     },
     plugins: [],
-    darkMode: "selector",
+    darkMode: "class",
 };

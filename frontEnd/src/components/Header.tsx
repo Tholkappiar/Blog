@@ -1,6 +1,5 @@
 import { useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { EditorContext } from "../context/EditorContext";
 import { ThemeContext } from "../context/ThemeContext";
 import sun from "../assets/svgs/sun.svg";
 import moon from "../assets/svgs/moon.svg";
@@ -8,18 +7,10 @@ import moon from "../assets/svgs/moon.svg";
 const Header = () => {
     const location = useLocation();
     const isEditorPage = location.pathname === "/post";
-    const editorContext = useContext(EditorContext);
     const themeContext = useContext(ThemeContext);
-
-    if (!editorContext) {
-        throw new Error("EditorPage must be used within an EditorProvider");
-    }
-
     if (!themeContext) {
-        throw new Error("Issue in Editor");
+        throw new Error("ThemeContext must be used within a ThemeProvider");
     }
-
-    const { handleSubmit } = editorContext;
     const { toggleTheme, isDarkMode } = themeContext;
 
     return (
@@ -40,7 +31,7 @@ const Header = () => {
                     {isEditorPage && (
                         <button
                             className="bg-accentBackground text-accentText text-sm p-2 rounded-lg font-semibold hover:bg-hoverSuccessAccent"
-                            onClick={handleSubmit}
+                            onClick={() => console.log("Publish")}
                         >
                             Publish
                         </button>
