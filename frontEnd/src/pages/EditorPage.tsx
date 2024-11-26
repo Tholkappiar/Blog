@@ -53,8 +53,9 @@ const EditorPage = () => {
         onUpdate({ editor }) {
             setEditorState((prevState) => ({
                 ...prevState,
-                editor: JSON.stringify(editor?.getJSON()),
+                post: JSON.stringify(editor?.getJSON()),
             }));
+            console.log(JSON.stringify(editor?.getJSON()));
         },
     });
 
@@ -125,7 +126,7 @@ const EditorPage = () => {
                     value={editorState.excerpt || ""}
                     className="outline-none resize-none bg-inherit px-4 text-lg text-primary dark:text-darkPrimary font-serif w-full"
                 />
-                <EditorContent editor={editor} />
+                <EditorContent editor={editor} className="p-5" />
                 <BubbleBar editor={editor} />
                 <input
                     type="text"

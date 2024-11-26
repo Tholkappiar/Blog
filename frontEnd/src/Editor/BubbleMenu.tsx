@@ -7,7 +7,14 @@ export const BubbleBar: React.FC<BubbleBarProps> = ({ editor }) => {
     if (!editor) return null;
 
     return (
-        <BubbleMenu editor={editor} tippyOptions={{ duration: 100 }}>
+        <BubbleMenu
+            editor={editor}
+            tippyOptions={{
+                duration: 100,
+                appendTo: document.body,
+                interactive: true,
+            }}
+        >
             <div className="bubble-menu">
                 <button
                     onClick={() => editor.chain().focus().toggleBold().run()}
