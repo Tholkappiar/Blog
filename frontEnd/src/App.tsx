@@ -4,7 +4,7 @@ import Login from "./pages/Login";
 import Blogs from "./pages/Blogs";
 import Blog from "./pages/Blog";
 import { ThemeProvider, ThemeContext } from "./context/ThemeContext";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import Layout from "./components/Layout";
 import Home from "./components/Home";
 import RequireAuth from "./components/RequireAuth";
@@ -26,47 +26,40 @@ const AppContent = () => {
     const context = useContext(ThemeContext);
     if (!context) throw new Error("Issue in ThemeContext");
     const { isDarkMode } = context;
+    useEffect(() => {
+        const theme = isDarkMode ? "dark" : "light";
+        document.body.className = theme;
+    }, [isDarkMode]);
 
     return (
-        <div className={`${isDarkMode ? "dark" : ""}`}>
-            <div className="bg-background dark:bg-darkBackground dark:text-darkPrimary">
-                <BrowserRouter>
-                    <AuthProvider>
-                        <EditorProviderContext>
-                            <Routes>
-                                <Route element={<Layout />}>
-                                    <Route path="/" element={<Home />} />
-                                    <Route path="/login" element={<Login />} />
-                                    <Route
-                                        path="/signup"
-                                        element={<Signup />}
-                                    />
-                                    <Route element={<PersistantLogin />}>
-                                        <Route element={<RequireAuth />}>
-                                            <Route
-                                                path="/blogs"
-                                                element={<Blogs />}
-                                            />
-                                            <Route
-                                                path="/blog/:id"
-                                                element={<Blog />}
-                                            />
-                                        </Route>
+        <div className="bg-background dark:bg-darkBackground dark:text-darkPrimary">
+            <BrowserRouter>
+                <AuthProvider>
+                    <EditorProviderContext>
+                        <Routes>
+                            <Route element={<Layout />}>
+                                <Route path="/" element={<Home />} />
+                                <Route path="/login" element={<Login />} />
+                                <Route path="/signup" element={<Signup />} />
+                                <Route element={<PersistantLogin />}>
+                                    <Route element={<RequireAuth />}>
+                                        <Route
+                                            path="/blogs"
+                                            element={<Blogs />}
+                                        />
+                                        <Route
+                                            path="/blog/:id"
+                                            element={<Blog />}
+                                        />
                                     </Route>
-                                    <Route
-                                        path="*"
-                                        element={<NotFound />}
-                                    ></Route>
-                                    <Route
-                                        path="/post"
-                                        element={<EditorPage />}
-                                    />
                                 </Route>
-                            </Routes>
-                        </EditorProviderContext>
-                    </AuthProvider>
-                </BrowserRouter>
-            </div>
+                                <Route path="*" element={<NotFound />}></Route>
+                                <Route path="/post" element={<EditorPage />} />
+                            </Route>
+                        </Routes>
+                    </EditorProviderContext>
+                </AuthProvider>
+            </BrowserRouter>
         </div>
     );
 };
