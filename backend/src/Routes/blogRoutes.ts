@@ -160,7 +160,6 @@ blogRoute
         }).$extends(withAccelerate());
 
         const blogId = c.req.param("id");
-
         // Validate ID
         if (!(await validatePostId(c, blogId))) {
             return c.json(

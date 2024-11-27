@@ -72,7 +72,7 @@ export async function setId(c: Context, next: Next) {
 
 export async function authorizePostAccess(c: Context, next: Next) {
     const userId = c.get("userId");
-    const { id } = await c.req.json();
+    const id = c.req.param("id");
 
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL,
