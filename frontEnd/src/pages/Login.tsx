@@ -103,18 +103,18 @@ const Login = () => {
     return (
         <div className="flex-1 flex h-full">
             {/* Left Section */}
-            <div className="w-1/2 p-10 lg:flex flex-col justify-center content-center hidden">
+            <div className="w-1/2 p-10 lg:flex flex-col justify-center content-center hidden bg-muted">
                 <div className="w-4/5 mx-auto">
-                    <p className="font-bold text-3xl text-primary dark:text-darkPrimary">
+                    <p className="font-bold text-3xl text-foreground">
                         "The customer service received is exceptional. The
                         support team went above and beyond to address my
                         concerns."
                     </p>
                     <div className="mt-4">
-                        <p className="font-bold text-lg text-textMain dark:text-darkAccentText">
+                        <p className="font-bold text-lg text-muted-foreground">
                             John WinField
                         </p>
-                        <p className="text-textMain dark:text-darkAccentText font-bold">
+                        <p className="text-muted-foreground font-semibold">
                             CEO, ACME Inc
                         </p>
                     </div>
@@ -124,23 +124,23 @@ const Login = () => {
             {/* Form Section */}
             <form
                 onSubmit={handleSubmit}
-                className="flex-1 lg:w-1/2 flex flex-col justify-center items-center lg:min-h-0 bg-accentBackground dark:bg-darkBackground dark:lg:bg-darkAccentBackground"
+                className="flex-1 lg:w-1/2 flex flex-col justify-center items-center lg:min-h-0"
             >
-                <p className="text-center text-2xl sm:text-3xl lg:text-4xl font-bold text-primary dark:text-darkPrimary">
+                <p className="text-center text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground">
                     Sign into your Account
                 </p>
-                <p className="text-center text-lg sm:text-xl text-primary dark:text-darkPrimary font-semibold my-2">
+                <p className="text-center text-lg sm:text-xl text-foreground font-semibold my-2">
                     Log into your library!
                 </p>
                 <div className="flex flex-col w-2/3 mx-auto mt-10">
                     {error && (
-                        <p className="bg-orange-300 p-2 rounded-lg font-bold text-red-600 text-center mb-4">
+                        <p className="bg-destructive p-2 rounded-lg font-bold text-destructive-foreground text-center mb-4">
                             {error}
                         </p>
                     )}
                     <label
                         htmlFor="email"
-                        className="font-semibold sm:text-lg text-primary dark:text-darkPrimary"
+                        className="font-semibold sm:text-lg text-foreground"
                     >
                         Email
                     </label>
@@ -150,12 +150,12 @@ const Login = () => {
                         name="email"
                         value={userLogin.email}
                         onChange={handleChange}
-                        className="border-divider border-2 rounded-md p-1 sm:p-2 my-2 outline-none text-primary"
+                        className="border-divider border-2 rounded-md p-1 sm:p-2 my-2 outline-none text-foreground"
                         placeholder="Email"
                     />
                     <label
                         htmlFor="password"
-                        className="font-semibold sm:text-lg text-primary dark:text-darkPrimary"
+                        className="font-semibold sm:text-lg text-foreground"
                     >
                         Password
                     </label>
@@ -165,7 +165,7 @@ const Login = () => {
                         name="password"
                         value={userLogin.password}
                         onChange={handleChange}
-                        className="border-divider border-2 rounded-md p-1 sm:p-2 my-2 outline-none text-primary"
+                        className="border-divider border-2 rounded-md p-1 sm:p-2 my-2 outline-none text-foreground"
                         placeholder="Password"
                     />
                     <div className="space-x-4 my-4">
@@ -174,15 +174,15 @@ const Login = () => {
                             onChange={handlePersist}
                             type="checkbox"
                         />
-                        <span className="text-primary dark:text-darkPrimary">
+                        <span className="text-foreground">
                             Trust this Device
                         </span>
                     </div>
-                    <p className="text-textMain dark:text-darkTextMain mt-4 text-center font-medium sm:text-lg">
+                    <p className="text-secondary-foreground mt-4 text-center font-medium sm:text-lg">
                         Don't have an Account?{" "}
                         <Link
                             to={"/signup"}
-                            className="underline font-semibold sm:text-lg text-primary dark:text-darkPrimary"
+                            className="underline font-semibold sm:text-lg text-foreground"
                         >
                             Sign Up
                         </Link>
@@ -190,7 +190,7 @@ const Login = () => {
                     <button
                         type="submit"
                         disabled={isLoading}
-                        className={`bg-darkCard dark:bg-accentBackground text-darkPrimary dark:text-primary hover:opacity-70 font-semibold sm:text-lg lg:font-medium rounded-lg p-2 my-3 ${
+                        className={`bg-primary text-foreground hover:opacity-70 font-semibold sm:text-lg lg:font-medium rounded-lg p-2 my-3 ${
                             isLoading ? "opacity-50" : ""
                         }`}
                     >
@@ -198,7 +198,7 @@ const Login = () => {
                             <div className="flex justify-center items-center gap-4">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
-                                    className="animate-spin dark:text-textMain text-darkTextMain"
+                                    className="animate-spin text-foreground"
                                     width="24"
                                     height="24"
                                     viewBox="0 0 24 24"
@@ -210,12 +210,12 @@ const Login = () => {
                                 >
                                     <path d="M21 12a9 9 0 1 1-6.219-8.56" />
                                 </svg>
-                                <span className="text-darkTextMain dark:text-textMain">
+                                <span className="text-primary-foreground">
                                     Signing In...
                                 </span>
                             </div>
                         ) : (
-                            <span className="text-darkTextMain dark:text-textMain ">
+                            <span className="text-primary-foreground">
                                 Sign in
                             </span>
                         )}

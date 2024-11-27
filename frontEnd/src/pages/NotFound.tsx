@@ -9,7 +9,7 @@ const NotFound = () => {
                     src={NotFoundImage}
                     alt="404 Not Found"
                 />
-                <p className="text-center text-textMain dark:text-darkMuted text-2xl lg:text-4xl font-bold font-mono">
+                <p className="text-center text-foreground text-2xl lg:text-4xl font-bold font-mono">
                     Page Not Found
                 </p>
             </div>

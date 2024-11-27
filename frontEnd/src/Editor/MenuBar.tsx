@@ -10,7 +10,7 @@ export const MenuBar: React.FC<MenuBarProps> = ({ editor }) => {
     }
 
     return (
-        <div className="control-group sticky top-0 bg-background dark:bg-darkBackground z-10 py-10">
+        <div className="control-group sticky top-0 z-10 py-10">
             <div className="button-group px-4 font-mono text-sm">
                 <button
                     onClick={() => editor.chain().focus().toggleBold().run()}

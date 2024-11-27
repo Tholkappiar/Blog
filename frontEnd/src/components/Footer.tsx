@@ -1,7 +1,7 @@
 const Footer = () => {
     return (
-        <div className="border-t-2 border-darkMuted bg-background dark:bg-darkBackground">
-            <div className="p-4 text-center text-textMain dark:text-darkMuted font-mono">
+        <div className="border-t-2 border-border bg-background">
+            <div className="p-4 text-center text-foreground font-mono">
                 Made with ❤️
             </div>
         </div>

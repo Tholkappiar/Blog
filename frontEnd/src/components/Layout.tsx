@@ -1,5 +1,4 @@
 import { Outlet } from "react-router-dom";
-import Footer from "./Footer";
 import Header from "./Header";
 
 const Layout = () => {
@@ -9,7 +8,6 @@ const Layout = () => {
             <section className="flex-1 flex flex-col">
                 <Outlet />
             </section>
-            <Footer />
         </main>
     );
 };

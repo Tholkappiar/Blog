@@ -32,33 +32,31 @@ const Header = () => {
     }
 
     return (
-        <div
-            className={`border-2 border-darkMuted flex ${
-                isEditorPage
-                    ? "justify-between sm:justify-around"
-                    : "justify-between"
-            } py-2 px-4 sm:px-12 items-center w-3/4 md:1/2 lg:w-1/3 mx-auto rounded-xl my-4`}
-        >
-            <Link to={"/blogs"}>
-                <p className="font-Oranienbaum font-bold text-2xl mx-2 text-primary dark:text-darkPrimary">
-                    Th
-                </p>
-            </Link>
-            <div className="flex items-center space-x-4 sm:space-x-8">
-                {isEditorPage && (
-                    <button
-                        className="bg-accentBackground text-accentText text-sm p-2 rounded-lg font-semibold hover:bg-hoverSuccessAccent"
-                        onClick={publishData}
-                    >
-                        Publish
-                    </button>
-                )}
+        <div className="bg-background">
+            <div
+                className={`border-2 border-border flex justify-between py-1 px-4 items-center w-3/4 md:1/2 lg:w-1/3 mx-auto rounded-xl my-4 bg-background`}
+            >
+                <Link to={"/blogs"}>
+                    <p className="font-Oranienbaum font-bold text-xl mx-2 text-foreground">
+                        Th
+                    </p>
+                </Link>
+                <div className="flex items-center space-x-4 sm:space-x-8">
+                    {isEditorPage && (
+                        <button
+                            className="bg-accent text-accent-foreground text-sm p-1 px-2 rounded-lg font-semibold hover:opacity-70"
+                            onClick={publishData}
+                        >
+                            Publish
+                        </button>
+                    )}
 
-                <img
-                    onClick={toggleTheme}
-                    src={isDarkMode ? moon : sun}
-                    className="text-textMain dark:text-darkMuted size-5"
-                />
+                    <img
+                        onClick={toggleTheme}
+                        src={isDarkMode ? moon : sun}
+                        className="size-4"
+                    />
+                </div>
             </div>
         </div>
     );

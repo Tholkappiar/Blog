@@ -117,23 +117,25 @@ const EditorPage = () => {
                     placeholder="Title"
                     onChange={handleTitleChange}
                     value={editorState.title || ""}
-                    className="outline-none resize-none bg-inherit px-4 text-2xl md:text-3xl lg:text-4xl text-primary dark:text-darkPrimary font-serif w-full"
+                    className="bg-inherit outline-none resize-none px-4 text-2xl md:text-3xl lg:text-4xl text-foreground font-serif w-full"
                 />
                 <textarea
                     ref={excerptRef}
                     placeholder="Excerpt"
                     onChange={handleExcerptChange}
                     value={editorState.excerpt || ""}
-                    className="outline-none resize-none bg-inherit px-4 text-lg text-primary dark:text-darkPrimary font-serif w-full"
+                    className="outline-none resize-none bg-inherit px-4 text-lg text-foreground font-serif w-full"
                 />
                 <EditorContent editor={editor} className="p-5" />
                 <BubbleBar editor={editor} />
-                <input
-                    type="text"
-                    placeholder="Tags"
-                    onChange={handleTags}
-                    className="bg-inherit md:my-5 px-4 text-lg text-primary dark:text-darkPrimary font-mono w-full border outline-none"
-                />
+                <div className="p-5">
+                    <input
+                        type="text"
+                        placeholder="Tags"
+                        onChange={handleTags}
+                        className="bg-inherit md:my-5 p-2 text-lg text-foreground font-mono w-full border outline-none"
+                    />
+                </div>
             </div>
         </EditorProviderContext>
     );

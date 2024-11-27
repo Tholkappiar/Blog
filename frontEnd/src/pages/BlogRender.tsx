@@ -30,7 +30,11 @@ const BlogRender: React.FC<BlogProps> = ({ post }) => {
         document.body.className = theme;
     }, [isDarkMode]);
 
-    return <EditorContent editor={editor} />;
+    return (
+        <article className="mt-10">
+            <EditorContent editor={editor} />
+        </article>
+    );
 };
 
 export default BlogRender;
