@@ -11,6 +11,7 @@ interface Blog {
     excerpt: string;
     tags: string[];
     id: string;
+    deleteBlog: (id: string) => void;
 }
 
 const Blogs = () => {
@@ -38,6 +39,10 @@ const Blogs = () => {
         fetchBlogs();
     }, []);
 
+    const deleteBlog = (id: string) => {
+        setBlogs((prevBlogs) => prevBlogs.filter((blog) => blog.id !== id));
+    };
+
     if (error) {
         return (
             <div className="text-center text-destructive-foreground">
@@ -64,6 +69,7 @@ const Blogs = () => {
                         tags={blog.tags}
                         authorId={blog.authorId}
                         id={blog.id}
+                        deleteBlog={deleteBlog}
                     />
                 ))
             ) : (
