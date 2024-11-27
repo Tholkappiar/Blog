@@ -3,7 +3,6 @@ import BlogCard from "../components/BlogCard";
 import { BlogCardShimmer } from "../components/BlogShimmerEffects";
 import { API_ROUTES } from "../utils/apiEndpoints";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
-import { ButtonDemo } from "@/components/Temp";
 
 interface Blog {
     title: string;
@@ -49,26 +48,27 @@ const Blogs = () => {
 
     return (
         <div className="w-full max-w-4xl 3xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 font-mono">
-            <div className="">
-                <h1 className="text-3xl font-bold text-center text-foreground mb-8">
-                    {"<ThBlog />"}
-                </h1>
-                {blogs.length ? (
-                    blogs.map((blog) => (
-                        <BlogCard
-                            key={blog.id}
-                            title={blog.title}
-                            excerpt={blog.excerpt}
-                            content={blog.post}
-                            tags={blog.tags}
-                            authorId={blog.authorId}
-                            id={blog.id}
-                        />
-                    ))
-                ) : (
-                    <BlogCardShimmer />
-                )}
-            </div>
+            <h1 className="text-3xl font-bold text-center text-foreground mb-2">
+                {"<ThBlog />"}
+            </h1>
+            <p className="text-center mb-10 text-muted-foreground">
+                think . write . share
+            </p>
+            {blogs.length ? (
+                blogs.map((blog) => (
+                    <BlogCard
+                        key={blog.id}
+                        title={blog.title}
+                        excerpt={blog.excerpt}
+                        content={blog.post}
+                        tags={blog.tags}
+                        authorId={blog.authorId}
+                        id={blog.id}
+                    />
+                ))
+            ) : (
+                <BlogCardShimmer />
+            )}
         </div>
     );
 };
