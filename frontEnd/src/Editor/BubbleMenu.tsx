@@ -11,8 +11,6 @@ export const BubbleBar: React.FC<BubbleBarProps> = ({ editor }) => {
             editor={editor}
             tippyOptions={{
                 duration: 100,
-                appendTo: document.body,
-                interactive: true,
             }}
         >
             <div className="bubble-menu">
