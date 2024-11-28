@@ -62,13 +62,14 @@ blogRoute
             HttpStatus.CREATED
         );
     })
-    .put("/", authorizePostAccess, async (c) => {
+    .put("/:id", authorizePostAccess, async (c) => {
         const prisma = new PrismaClient({
             datasourceUrl: c.env.DATABASE_URL,
         }).$extends(withAccelerate());
 
         const body = await c.req.json();
-        const { id, title, post, tags } = body;
+        const id = c.req.param("id");
+        const { title, post, tags, excerpt } = body;
 
         // Validate ID
         if (!(await validatePostId(c, id))) {
@@ -85,6 +86,7 @@ blogRoute
             title,
             post,
             tags,
+            excerpt,
         });
         if (!validation.success) {
             return c.json(
@@ -97,7 +99,7 @@ blogRoute
 
         await prisma.post.update({
             where: { id },
-            data: { title, post, tags },
+            data: { title, post, tags, excerpt },
         });
 
         return c.json({

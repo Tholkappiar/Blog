@@ -22,19 +22,20 @@ const tagsSchema = z
     .min(1, { message: "At least 1 tag is required" })
     .max(5, { message: "A maximum of 5 tags are allowed" });
 
-const excerpt = z.string({ message: "Excerpt must be a string" });
+const excerpSchemat = z.string({ message: "Excerpt must be a string" });
 
 export const createPostInputSchema = z.object({
     title: titleSchema,
     post: postSchema,
     tags: tagsSchema,
-    excerpt: excerpt,
+    excerpt: excerpSchemat,
 });
 
 export const updatePostInputSchema = z.object({
     title: titleSchema.optional(),
     post: postSchema.optional(),
     tags: tagsSchema.optional(),
+    excerpt: excerpSchemat.optional(),
 });
 
 export type CreatePostInput = z.infer<typeof createPostInputSchema>;

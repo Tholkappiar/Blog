@@ -20,7 +20,7 @@ const EditorPage = () => {
 
     const editor = useEditor({
         extensions,
-        content: post, // Start with empty content to prevent premature rendering
+        content: post,
         onUpdate({ editor }) {
             setEditorState((prevState) => ({
                 ...prevState,
