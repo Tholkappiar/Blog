@@ -10,7 +10,7 @@ import React, {
 type EditorState = {
     title: string;
     excerpt: string;
-    post: string | null;
+    post: string;
     tags: string[] | null;
     id: string | null;
 };
@@ -42,8 +42,8 @@ export const EditorProviderContext: React.FC<EditorProviderContextProps> = ({
     const [editorState, setEditorState] = useState<EditorState>({
         title: "",
         excerpt: "",
-        post: null,
-        tags: null,
+        post: "",
+        tags: [],
         id: null,
     });
 

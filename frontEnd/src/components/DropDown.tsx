@@ -9,47 +9,32 @@ import {
 import useAxiosPrivate from "@/hooks/useAxiosPrivate";
 import { API_ROUTES } from "@/utils/apiEndpoints";
 import { useState } from "react";
-import { useEditorContext } from "@/context/EditorContext";
 import { useNavigate } from "react-router-dom";
 
 type BlogDropDown = {
-    storedState: {
-        title: string;
-        excerpt: string;
-        post: string;
-        tags: string[];
-        id: string;
-    };
+    id: string;
     deleteBlog: (id: string) => void;
 };
 
-export function BlogCardDropDown({ storedState, deleteBlog }: BlogDropDown) {
+export function BlogCardDropDown({ id, deleteBlog }: BlogDropDown) {
     const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
     const axiosPrivate = useAxiosPrivate();
 
-    const { setEditorState } = useEditorContext();
     const navigate = useNavigate();
 
     async function EditBlog() {
-        setEditorState({
-            title: storedState.title,
-            excerpt: storedState.excerpt,
-            post: storedState.post,
-            tags: storedState.tags,
-            id: storedState.id,
-        });
-        navigate(`/updateBlog`);
+        navigate(`/updateBlog/${id}`, { state: { page: "editPage" } });
     }
 
     async function DeleteBlog() {
         setIsDeleting(true);
         try {
             const response = await axiosPrivate.delete(
-                API_ROUTES.BLOG.DELETE_BLOG(storedState.id)
+                API_ROUTES.BLOG.DELETE_BLOG(id)
             );
             if (response.status === 200) {
-                deleteBlog(storedState.id);
+                deleteBlog(id);
             }
         } catch (err) {
             console.error("Error deleting blog:", err);

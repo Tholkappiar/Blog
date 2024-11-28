@@ -11,7 +11,8 @@ const Header = () => {
     const [isPublished, setIsPublished] = useState<boolean>(false);
 
     const location = useLocation();
-    const isEditorPage = location.pathname === "/post";
+    const isEditorPage =
+        location.pathname === "/post" || location.pathname === "/updateBlog";
     const themeContext = useContext(ThemeContext);
     if (!themeContext) {
         throw new Error("ThemeContext must be used within a ThemeProvider");
@@ -20,14 +21,15 @@ const Header = () => {
 
     const { editorState } = useEditorContext();
 
-    const { title, post, tags, excerpt, id } = editorState || {};
+    const { title, post, tags, excerpt } = editorState || {};
     const axiosPrivate = useAxiosPrivate();
 
+    const from = location.state?.from === "editPage";
     async function publishBlog() {
         try {
-            if (id) {
+            if (from) {
                 const updateResponse = await axiosPrivate.put(
-                    API_ROUTES.BLOG.UPDATE_BLOG(id),
+                    API_ROUTES.BLOG.UPDATE_BLOG(""),
                     {
                         title,
                         post,
@@ -35,7 +37,9 @@ const Header = () => {
                         excerpt,
                     }
                 );
-                console.log(updateResponse);
+                if (updateResponse.status === 200) {
+                    console.log(updateResponse.data);
+                }
             } else {
                 const postResponse = await axiosPrivate.post(
                     API_ROUTES.BLOG.POST_BLOG,
@@ -54,15 +58,12 @@ const Header = () => {
             console.log(err);
         }
     }
-    console.log("id from header : " + editorState.id);
+
     const navigate = useNavigate();
     useEffect(() => {
         if (isPublished) {
             navigate("/blogs", { replace: true });
         }
-        return () => {
-            editorState.id = null;
-        };
     }, [isPublished]);
 
     return (
@@ -75,6 +76,7 @@ const Header = () => {
                         Th
                     </p>
                 </Link>
+                <button onClick={() => console.log(editorState)}>print</button>
                 <div className="flex items-center space-x-4 sm:space-x-8">
                     {isEditorPage && (
                         <button

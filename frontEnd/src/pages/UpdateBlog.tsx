@@ -1,8 +1,4 @@
-import { Color } from "@tiptap/extension-color";
-import ListItem from "@tiptap/extension-list-item";
-import TextStyle from "@tiptap/extension-text-style";
 import { useEditor, EditorContent } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
 import "../styles/EditorPage.css";
 import { ChangeEvent, useEffect, useRef } from "react";
 import {
@@ -11,27 +7,18 @@ import {
 } from "../context/EditorContext";
 import { BubbleBar } from "../Editor/BubbleMenu";
 import { MenuBar } from "../Editor/MenuBar";
-
-const extensions = [
-    Color.configure({ types: [TextStyle.name, ListItem.name] }),
-    StarterKit.configure({
-        bulletList: {
-            keepMarks: true,
-            keepAttributes: false,
-        },
-        orderedList: {
-            keepMarks: true,
-            keepAttributes: false,
-        },
-    }),
-];
+import { extensions } from "@/Editor/extension";
+import { useParams } from "react-router-dom";
+import useAxiosPrivate from "@/hooks/useAxiosPrivate";
+import { API_ROUTES } from "@/utils/apiEndpoints";
+import { content } from "./EditorPage";
 
 const UpdateBlog = () => {
     const { editorState, setEditorState } = useEditorContext();
-
+    const edit = editorState.post ? JSON.parse(editorState.post) : content;
     const editor = useEditor({
         extensions,
-        content: JSON.parse(editorState.post || "{}"),
+        content: edit,
         onUpdate({ editor }) {
             setEditorState((prevState) => ({
                 ...prevState,
@@ -39,6 +26,11 @@ const UpdateBlog = () => {
             }));
         },
     });
+
+    useEffect(() => {
+        if (editor) editor.commands.setContent(edit);
+        console.log("expensive");
+    }, [editorState]);
 
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
     const excerptRef = useRef<HTMLTextAreaElement | null>(null);
@@ -80,6 +72,32 @@ const UpdateBlog = () => {
             excerptRef.current.style.height = `${excerptRef.current.scrollHeight}px`;
         }
     }, [editorState.excerpt]);
+
+    const params = useParams();
+    const { id } = params;
+    const axiosPrivate = useAxiosPrivate();
+    useEffect(() => {
+        async function getBlog(id: string) {
+            const response = await axiosPrivate.get(
+                API_ROUTES.BLOG.GET_BLOG(id)
+            );
+            if (response.status === 200) {
+                const blog = response.data.blog;
+                setEditorState({
+                    title: blog.title,
+                    excerpt: blog.excerpt,
+                    id: blog.id,
+                    post: blog.post,
+                    tags: blog.tags,
+                });
+                console.log(blog);
+            }
+        }
+
+        if (params && id) {
+            getBlog(id);
+        }
+    }, []);
 
     return (
         <EditorProviderContext>
