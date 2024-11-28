@@ -65,7 +65,7 @@ const Blogs = () => {
                         key={blog.id}
                         title={blog.title}
                         excerpt={blog.excerpt}
-                        content={blog.post}
+                        post={blog.post}
                         tags={blog.tags}
                         authorId={blog.authorId}
                         id={blog.id}

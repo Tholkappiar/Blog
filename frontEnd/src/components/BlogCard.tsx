@@ -4,14 +4,21 @@ import { BlogCardDropDown } from "./DropDown";
 interface BlogCardProps {
     title: string;
     excerpt: string;
-    content: string;
+    post: string;
     authorId: string;
     id: string;
     tags: string[];
     deleteBlog: (id: string) => void;
 }
 
-const BlogCard = ({ title, id, excerpt, tags, deleteBlog }: BlogCardProps) => {
+const BlogCard = ({
+    title,
+    id,
+    post,
+    excerpt,
+    tags,
+    deleteBlog,
+}: BlogCardProps) => {
     return (
         <div className="group">
             <article
@@ -51,7 +58,10 @@ const BlogCard = ({ title, id, excerpt, tags, deleteBlog }: BlogCardProps) => {
                     </div>
                 </Link>
                 <div className="absolute top-3 right-3">
-                    <BlogCardDropDown id={id} deleteBlog={deleteBlog} />
+                    <BlogCardDropDown
+                        storedState={{ title, excerpt, post, tags, id }}
+                        deleteBlog={deleteBlog}
+                    />
                 </div>
             </article>
         </div>

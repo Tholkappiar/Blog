@@ -51,6 +51,10 @@ const AppContent = () => {
                                             path="/blog/:id"
                                             element={<Blog />}
                                         />
+                                        <Route
+                                            path="/UpdateBlog"
+                                            element={<EditorPage />}
+                                        />
                                     </Route>
                                 </Route>
                                 <Route path="*" element={<NotFound />}></Route>

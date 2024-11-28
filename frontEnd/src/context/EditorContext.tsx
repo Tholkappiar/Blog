@@ -12,6 +12,7 @@ type EditorState = {
     excerpt: string;
     post: string | null;
     tags: string[] | null;
+    id: string | null;
 };
 
 interface EditorContextType {
@@ -43,6 +44,7 @@ export const EditorProviderContext: React.FC<EditorProviderContextProps> = ({
         excerpt: "",
         post: null,
         tags: null,
+        id: null,
     });
 
     return (

@@ -26,24 +26,17 @@ const extensions = [
     }),
 ];
 
-const content = `
-<p>
-  start your story <strong>here</strong>.
-</p>
-`;
-
-const EditorPage = () => {
+const UpdateBlog = () => {
     const { editorState, setEditorState } = useEditorContext();
-    const storedPost = editorState.post ? JSON.parse(editorState.post) : null;
+
     const editor = useEditor({
         extensions,
-        content: storedPost || content,
+        content: JSON.parse(editorState.post || "{}"),
         onUpdate({ editor }) {
             setEditorState((prevState) => ({
                 ...prevState,
                 post: JSON.stringify(editor?.getJSON()),
             }));
-            console.log(JSON.stringify(editor?.getJSON()));
         },
     });
 
@@ -52,47 +45,41 @@ const EditorPage = () => {
 
     const handleTitleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
         const value = event.target.value;
-        const capitalized = value.charAt(0).toUpperCase() + value.slice(1);
         setEditorState((prevState) => ({
             ...prevState,
-            title: capitalized,
+            title: value,
         }));
     };
 
     const handleExcerptChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
         const value = event.target.value;
-        const capitalized = value.charAt(0).toUpperCase() + value.slice(1);
         setEditorState((prevState) => ({
             ...prevState,
-            excerpt: capitalized,
+            excerpt: value,
         }));
     };
 
-    function handleTags(event: ChangeEvent<HTMLInputElement>) {
+    const handleTagsChange = (event: ChangeEvent<HTMLInputElement>) => {
         const tags = event.target.value.split(" ");
-        setEditorState((prev) => ({
-            ...prev,
-            tags: tags,
-        }));
-    }
-
-    useEffect(() => {
         setEditorState((prevState) => ({
             ...prevState,
-            post: JSON.stringify(editor?.getJSON()),
+            tags,
         }));
+    };
 
+    useEffect(() => {
         if (textareaRef.current) {
             textareaRef.current.style.height = "auto";
             textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
-            textareaRef.current.focus();
         }
+    }, [editorState.title]);
+
+    useEffect(() => {
         if (excerptRef.current) {
             excerptRef.current.style.height = "auto";
             excerptRef.current.style.height = `${excerptRef.current.scrollHeight}px`;
-            excerptRef.current.focus();
         }
-    }, [editorState.title, editorState.excerpt]);
+    }, [editorState.excerpt]);
 
     return (
         <EditorProviderContext>
@@ -102,14 +89,14 @@ const EditorPage = () => {
                     ref={textareaRef}
                     placeholder="Title"
                     onChange={handleTitleChange}
-                    value={editorState.title || ""}
+                    value={editorState.title}
                     className="bg-inherit outline-none resize-none px-4 text-2xl md:text-3xl lg:text-4xl text-foreground font-serif w-full"
                 />
                 <textarea
                     ref={excerptRef}
                     placeholder="Excerpt"
                     onChange={handleExcerptChange}
-                    value={editorState.excerpt || ""}
+                    value={editorState.excerpt}
                     className="outline-none resize-none bg-inherit px-4 text-lg text-foreground font-serif w-full"
                 />
                 <EditorContent editor={editor} className="p-5" />
@@ -117,9 +104,9 @@ const EditorPage = () => {
                 <div className="p-5">
                     <input
                         type="text"
-                        value={editorState.tags?.join(" ")}
-                        placeholder="Tags"
-                        onChange={handleTags}
+                        placeholder="Tags (separated by spaces)"
+                        value={editorState?.tags?.join(" ")}
+                        onChange={handleTagsChange}
                         className="bg-inherit md:my-5 p-2 text-lg text-foreground font-mono w-full border outline-none"
                     />
                 </div>
@@ -128,4 +115,4 @@ const EditorPage = () => {
     );
 };
 
-export default EditorPage;
+export default UpdateBlog;

@@ -1,5 +1,5 @@
-import { useContext } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ThemeContext } from "../context/ThemeContext";
 import sun from "../assets/svgs/sun.svg";
 import moon from "../assets/svgs/moon.svg";
@@ -8,6 +8,8 @@ import { API_ROUTES } from "../utils/apiEndpoints";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 const Header = () => {
+    const [isPublished, setIsPublished] = useState<boolean>(false);
+
     const location = useLocation();
     const isEditorPage = location.pathname === "/post";
     const themeContext = useContext(ThemeContext);
@@ -18,18 +20,50 @@ const Header = () => {
 
     const { editorState } = useEditorContext();
 
-    const { title, post, tags, excerpt } = editorState || {};
+    const { title, post, tags, excerpt, id } = editorState || {};
     const axiosPrivate = useAxiosPrivate();
 
-    async function publishData() {
-        const response = await axiosPrivate.post(API_ROUTES.BLOG.POST_BLOG, {
-            title,
-            post,
-            tags,
-            excerpt,
-        });
-        console.log(response);
+    async function publishBlog() {
+        try {
+            if (id) {
+                const updateResponse = await axiosPrivate.put(
+                    API_ROUTES.BLOG.UPDATE_BLOG(id),
+                    {
+                        title,
+                        post,
+                        tags,
+                        excerpt,
+                    }
+                );
+                console.log(updateResponse);
+            } else {
+                const postResponse = await axiosPrivate.post(
+                    API_ROUTES.BLOG.POST_BLOG,
+                    {
+                        title,
+                        post,
+                        tags,
+                        excerpt,
+                    }
+                );
+                if (postResponse.status === 201) {
+                    setIsPublished(true);
+                }
+            }
+        } catch (err) {
+            console.log(err);
+        }
     }
+    console.log("id from header : " + editorState.id);
+    const navigate = useNavigate();
+    useEffect(() => {
+        if (isPublished) {
+            navigate("/blogs", { replace: true });
+        }
+        return () => {
+            editorState.id = null;
+        };
+    }, [isPublished]);
 
     return (
         <div className="bg-background">
@@ -44,8 +78,8 @@ const Header = () => {
                 <div className="flex items-center space-x-4 sm:space-x-8">
                     {isEditorPage && (
                         <button
-                            className="bg-accent text-accent-foreground text-sm p-1 px-2 rounded-lg font-semibold hover:opacity-70"
-                            onClick={publishData}
+                            className="dark:bg-green-700 bg-green-500 text-foreground text-sm p-1 px-2 rounded-lg font-semibold hover:opacity-70"
+                            onClick={publishBlog}
                         >
                             Publish
                         </button>
