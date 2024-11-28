@@ -16,3 +16,9 @@ export const extensions = [
         },
     }),
 ];
+
+export const content = `
+<p>
+  start your story <strong>here</strong>.
+</p>
+`;

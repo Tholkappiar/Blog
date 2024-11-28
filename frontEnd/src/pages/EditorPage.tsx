@@ -7,22 +7,17 @@ import {
 } from "../context/EditorContext";
 import { BubbleBar } from "../Editor/BubbleMenu";
 import { MenuBar } from "../Editor/MenuBar";
-import { extensions } from "@/Editor/extension";
-
-export let content = `
-<p>
-  start your story <strong>here</strong>.
-</p>
-`;
+import { content, extensions } from "@/Editor/extension";
+import { useLocation, useParams } from "react-router-dom";
+import useAxiosPrivate from "@/hooks/useAxiosPrivate";
+import { API_ROUTES } from "@/utils/apiEndpoints";
 
 const EditorPage = () => {
     const { editorState, setEditorState } = useEditorContext();
-    const storedPost = editorState.post ? editorState.post : null;
-    if (storedPost) content = storedPost;
-    console.log("content hus", content);
+    const post = editorState.post ? JSON.parse(editorState.post) : content;
     const editor = useEditor({
         extensions,
-        content: JSON.parse(content),
+        content: post,
         onUpdate({ editor }) {
             setEditorState((prevState) => ({
                 ...prevState,
@@ -32,6 +27,11 @@ const EditorPage = () => {
         },
         shouldRerenderOnTransaction: false,
     });
+
+    useEffect(() => {
+        if (editor) editor.commands.setContent(post);
+        console.log("expensive");
+    }, [editorState]);
 
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
     const excerptRef = useRef<HTMLTextAreaElement | null>(null);
@@ -82,6 +82,45 @@ const EditorPage = () => {
             excerptRef.current.focus();
         }
     }, [editorState.excerpt]);
+
+    const params = useParams();
+    const { id } = params;
+    const axiosPrivate = useAxiosPrivate();
+    const location = useLocation();
+    const from = location.state?.page === "editPage";
+
+    useEffect(() => {
+        async function getBlog(id: string) {
+            const response = await axiosPrivate.get(
+                API_ROUTES.BLOG.GET_BLOG(id)
+            );
+            if (response.status === 200) {
+                const blog = response.data.blog;
+                setEditorState({
+                    title: blog.title,
+                    excerpt: blog.excerpt,
+                    id: blog.id,
+                    post: blog.post,
+                    tags: blog.tags,
+                });
+                console.log(blog);
+            }
+        }
+
+        if (params && id && from) {
+            getBlog(id);
+        }
+
+        return () => {
+            setEditorState({
+                title: "",
+                excerpt: "",
+                post: "",
+                tags: [],
+                id: null,
+            });
+        };
+    }, []);
 
     return (
         <EditorProviderContext>

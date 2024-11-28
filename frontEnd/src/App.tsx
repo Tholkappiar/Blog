@@ -13,7 +13,6 @@ import PersistantLogin from "./Auth/PersistantLogin";
 import NotFound from "./pages/NotFound";
 import EditorPage from "./pages/EditorPage";
 import { EditorProviderContext } from "./context/EditorContext";
-import UpdateBlog from "./pages/UpdateBlog";
 
 function App() {
     return (
@@ -54,7 +53,7 @@ const AppContent = () => {
                                         />
                                         <Route
                                             path="/UpdateBlog/:id"
-                                            element={<UpdateBlog />}
+                                            element={<EditorPage />}
                                         />
                                     </Route>
                                 </Route>

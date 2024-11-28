@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { ThemeContext } from "../context/ThemeContext";
 import sun from "../assets/svgs/sun.svg";
 import moon from "../assets/svgs/moon.svg";
@@ -12,7 +12,8 @@ const Header = () => {
 
     const location = useLocation();
     const isEditorPage =
-        location.pathname === "/post" || location.pathname === "/updateBlog";
+        location.pathname === "/post" ||
+        location.pathname.split("/")[1] === "updateBlog";
     const themeContext = useContext(ThemeContext);
     if (!themeContext) {
         throw new Error("ThemeContext must be used within a ThemeProvider");
@@ -24,12 +25,14 @@ const Header = () => {
     const { title, post, tags, excerpt } = editorState || {};
     const axiosPrivate = useAxiosPrivate();
 
-    const from = location.state?.from === "editPage";
+    const from = location.state?.page === "editPage";
+    const params = useParams();
+    const { id } = params;
     async function publishBlog() {
         try {
-            if (from) {
+            if (from && id) {
                 const updateResponse = await axiosPrivate.put(
-                    API_ROUTES.BLOG.UPDATE_BLOG(""),
+                    API_ROUTES.BLOG.UPDATE_BLOG(id),
                     {
                         title,
                         post,
@@ -38,7 +41,7 @@ const Header = () => {
                     }
                 );
                 if (updateResponse.status === 200) {
-                    console.log(updateResponse.data);
+                    setIsPublished(true);
                 }
             } else {
                 const postResponse = await axiosPrivate.post(
@@ -76,7 +79,6 @@ const Header = () => {
                         Th
                     </p>
                 </Link>
-                <button onClick={() => console.log(editorState)}>print</button>
                 <div className="flex items-center space-x-4 sm:space-x-8">
                     {isEditorPage && (
                         <button
