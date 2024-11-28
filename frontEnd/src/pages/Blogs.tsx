@@ -53,10 +53,10 @@ const Blogs = () => {
 
     return (
         <div className="w-full max-w-4xl 3xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 font-mono">
-            <h1 className="text-3xl font-bold text-center text-foreground mb-2">
+            <h1 className="text-3xl font-bold text-center text-foreground mb-2 select-none">
                 {"<ThBlog />"}
             </h1>
-            <p className="text-center mb-10 text-muted-foreground">
+            <p className="text-center mb-10 text-muted-foreground select-none">
                 think . write . share
             </p>
             {blogs.length ? (

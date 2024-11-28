@@ -1,11 +1,10 @@
 import { useContext } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { ThemeContext } from "../context/ThemeContext";
-import sun from "../assets/svgs/sun.svg";
-import moon from "../assets/svgs/moon.svg";
 import { useEditorContext } from "../context/EditorContext";
 import { API_ROUTES } from "../utils/apiEndpoints";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import { Moon, Sun } from "lucide-react";
 
 const Header = () => {
     const location = useLocation();
@@ -81,11 +80,13 @@ const Header = () => {
                         </button>
                     )}
 
-                    <img
-                        onClick={toggleTheme}
-                        src={isDarkMode ? moon : sun}
-                        className="size-4"
-                    />
+                    <div onClick={toggleTheme}>
+                        {isDarkMode ? (
+                            <Moon className="text-foreground" />
+                        ) : (
+                            <Sun className="text-orange-500" />
+                        )}
+                    </div>
                 </div>
             </div>
         </div>
