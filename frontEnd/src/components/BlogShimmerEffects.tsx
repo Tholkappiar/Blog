@@ -36,39 +36,3 @@ export function BlogFullShimmer() {
         </div>
     );
 }
-
-export function AuthorCardShimmer() {
-    return (
-        <div className="lg:w-1/3 sm:p-4 py-8 animate-pulse">
-            <p className="h-6 bg-muted rounded"></p>
-            <div className="flex items-center space-x-4 mt-5">
-                <ProfileIconShimmer />
-                <p className="p-2 w-1/2 bg-muted rounded"></p>
-            </div>
-        </div>
-    );
-}
-
-export function RecommendedTagsShimmer() {
-    return (
-        <div className="lg:w-1/3 mt-8 lg:mt-0 animate-pulse">
-            <div className="bg-card dark:bg-darkCard shadow rounded-lg p-6">
-                <h2 className="bg-muted p-2 mb-4"></h2>
-                <div className="flex flex-wrap">
-                    {[...Array(5)].map((_, index) => (
-                        <span
-                            key={index}
-                            className="bg-muted rounded-full px-10 py-3 dark:text-darkAccentText mr-2 mb-2"
-                        ></span>
-                    ))}
-                </div>
-            </div>
-        </div>
-    );
-}
-
-export function ProfileIconShimmer() {
-    return (
-        <div className="rounded-full bg-muted size-7 flex justify-center items-center animate-pulse"></div>
-    );
-}

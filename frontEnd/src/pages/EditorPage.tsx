@@ -7,7 +7,7 @@ import {
 } from "../context/EditorContext";
 import { BubbleBar } from "../Editor/BubbleMenu";
 import { MenuBar } from "../Editor/MenuBar";
-import { content, extensions } from "@/Editor/extension";
+import { content, extensions } from "@/Editor/EditorUtils";
 import { useLocation, useParams } from "react-router-dom";
 import useAxiosPrivate from "@/hooks/useAxiosPrivate";
 import { API_ROUTES } from "@/utils/apiEndpoints";

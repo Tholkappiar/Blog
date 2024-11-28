@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { ThemeContext } from "../context/ThemeContext";
 import sun from "../assets/svgs/sun.svg";
@@ -8,8 +8,6 @@ import { API_ROUTES } from "../utils/apiEndpoints";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 const Header = () => {
-    const [isPublished, setIsPublished] = useState<boolean>(false);
-
     const location = useLocation();
     const isEditorPage =
         location.pathname === "/post" ||
@@ -28,6 +26,7 @@ const Header = () => {
     const from = location.state?.page === "editPage";
     const params = useParams();
     const { id } = params;
+    const navigate = useNavigate();
     async function publishBlog() {
         try {
             if (from && id) {
@@ -41,7 +40,7 @@ const Header = () => {
                     }
                 );
                 if (updateResponse.status === 200) {
-                    setIsPublished(true);
+                    navigate("/blogs", { replace: true });
                 }
             } else {
                 const postResponse = await axiosPrivate.post(
@@ -54,20 +53,13 @@ const Header = () => {
                     }
                 );
                 if (postResponse.status === 201) {
-                    setIsPublished(true);
+                    navigate("/blogs", { replace: true });
                 }
             }
         } catch (err) {
             console.log(err);
         }
     }
-
-    const navigate = useNavigate();
-    useEffect(() => {
-        if (isPublished) {
-            navigate("/blogs", { replace: true });
-        }
-    }, [isPublished]);
 
     return (
         <div className="bg-background">
