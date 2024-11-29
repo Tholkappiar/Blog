@@ -32,24 +32,21 @@ const AppContent = () => {
                                 <Route path="/" element={<Home />} />
                                 <Route path="/login" element={<Login />} />
                                 <Route path="/signup" element={<Signup />} />
-                                <Route element={<PersistantLogin />}>
-                                    <Route element={<RequireAuth />}>
-                                        <Route
-                                            path="/blogs"
-                                            element={<Blogs />}
-                                        />
-                                        <Route
-                                            path="/blog/:id"
-                                            element={<Blog />}
-                                        />
-                                        <Route
-                                            path="/UpdateBlog/:id"
-                                            element={<EditorPage />}
-                                        />
-                                    </Route>
+                                <Route path="/blogs" element={<Blogs />} />
+                                <Route path="/blog/:id" element={<Blog />} />
+                                {/* <Route element={<PersistantLogin />}> */}
+                                <Route element={<RequireAuth />}>
+                                    <Route
+                                        path="/UpdateBlog/:id"
+                                        element={<EditorPage />}
+                                    />
+                                    <Route
+                                        path="/post"
+                                        element={<EditorPage />}
+                                    />
                                 </Route>
+                                {/* </Route> */}
                                 <Route path="*" element={<NotFound />}></Route>
-                                <Route path="/post" element={<EditorPage />} />
                             </Route>
                         </Routes>
                     </EditorProviderContext>

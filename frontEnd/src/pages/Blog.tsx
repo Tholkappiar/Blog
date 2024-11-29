@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import BlogDisplay from "../components/BlogDisplay";
 import { BlogFullShimmer } from "../components/BlogShimmerEffects";
-import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import { API_ROUTES } from "../utils/apiEndpoints";
+import axiosInstance from "@/utils/axiosInstance";
 
 type Blog = {
     authorId: string;
@@ -18,8 +18,6 @@ const Blog = () => {
     const [blog, setBlog] = useState<Blog | null>(null);
     const [error, setError] = useState<string | null>(null);
 
-    const axiosPrivate = useAxiosPrivate();
-
     useEffect(() => {
         const fetchBlog = async () => {
             if (!id) {
@@ -28,7 +26,7 @@ const Blog = () => {
             }
 
             try {
-                const response = await axiosPrivate.get(
+                const response = await axiosInstance.get(
                     API_ROUTES.BLOG.GET_BLOG(id)
                 );
                 if (response.data && response.data.blog) {

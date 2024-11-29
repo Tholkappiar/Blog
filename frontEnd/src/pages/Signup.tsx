@@ -118,7 +118,7 @@ const Signup = () => {
                             type="text"
                             value={newUser.username}
                             onChange={handleChange}
-                            className="border-divider border-2 rounded-md p-1 sm:p-2 my-2 outline-none text-foreground"
+                            className="border-divider border-2 rounded-md p-1 sm:p-2 my-2 outline-none text-black"
                             placeholder="Username"
                         />
                         <label
@@ -133,7 +133,7 @@ const Signup = () => {
                             type="email"
                             value={newUser.email}
                             onChange={handleChange}
-                            className="border-divider border-2 rounded-md p-1 sm:p-2 my-2 outline-none text-foreground"
+                            className="border-divider border-2 rounded-md p-1 sm:p-2 my-2 outline-none text-black"
                             placeholder="Email"
                         />
                         <label
@@ -148,7 +148,7 @@ const Signup = () => {
                             type="password"
                             value={newUser.password}
                             onChange={handleChange}
-                            className="border-divider border-2 rounded-md p-1 sm:p-2 my-2 outline-none text-foreground"
+                            className="border-divider border-2 rounded-md p-1 sm:p-2 my-2 outline-none text-black"
                             placeholder="Password"
                         />
                         <p className="text-foreground mt-4 text-center font-medium sm:text-lg">
@@ -175,9 +175,9 @@ const Signup = () => {
                                         viewBox="0 0 24 24"
                                         fill="none"
                                         stroke="currentColor"
-                                        stroke-width="2"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
+                                        strokeWidth="2"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
                                     >
                                         <path d="M21 12a9 9 0 1 1-6.219-8.56" />
                                     </svg>

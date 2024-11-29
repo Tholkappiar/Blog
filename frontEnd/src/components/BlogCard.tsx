@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { BlogCardDropDown } from "./DropDown";
 import { format } from "date-fns";
 import { extractTextFromJSON, getReadingTime } from "@/utils/blogUtils";
+import useAuth from "@/hooks/useAuth";
 
 interface BlogCardProps {
     title: string;
@@ -10,8 +11,9 @@ interface BlogCardProps {
     authorId: string;
     id: string;
     tags: string[];
-    deleteBlog: (id: string) => void;
+    filterBlog: (id: string) => void;
     dateTime: string;
+    published: boolean;
 }
 
 const BlogCard = ({
@@ -21,10 +23,13 @@ const BlogCard = ({
     tags,
     dateTime,
     post,
-    deleteBlog,
+    published,
+    filterBlog,
 }: BlogCardProps) => {
     const extractedText = extractTextFromJSON(post);
     const readingTime = getReadingTime(extractedText);
+
+    const { user } = useAuth();
 
     return (
         <div className="group">
@@ -64,9 +69,15 @@ const BlogCard = ({
                         </div>
                     </div>
                 </Link>
-                <div className="absolute top-3 right-3">
-                    <BlogCardDropDown id={id} deleteBlog={deleteBlog} />
-                </div>
+                {user.token && (
+                    <div className="absolute top-3 right-3">
+                        <BlogCardDropDown
+                            id={id}
+                            filterBlog={filterBlog}
+                            published={published}
+                        />
+                    </div>
+                )}
             </article>
         </div>
     );

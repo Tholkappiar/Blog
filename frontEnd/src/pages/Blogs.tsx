@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import BlogCard from "../components/BlogCard";
 import { BlogCardShimmer } from "../components/BlogShimmerEffects";
 import { API_ROUTES } from "../utils/apiEndpoints";
-import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import axiosInstance from "@/utils/axiosInstance";
 
 interface Blog {
     title: string;
@@ -11,7 +11,8 @@ interface Blog {
     excerpt: string;
     tags: string[];
     id: string;
-    deleteBlog: (id: string) => void;
+    published: boolean;
+    filterBlog: (id: string) => void;
     createdAt: string;
 }
 
@@ -20,12 +21,10 @@ const Blogs = () => {
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
 
-    const axiosPrivate = useAxiosPrivate();
-
     useEffect(() => {
         const fetchBlogs = async () => {
             try {
-                const response = await axiosPrivate.get(
+                const response = await axiosInstance.get(
                     API_ROUTES.BLOG.GET_ALL_BLOGS
                 );
                 if (!response) {
@@ -43,7 +42,7 @@ const Blogs = () => {
         fetchBlogs();
     }, []);
 
-    const deleteBlog = (id: string) => {
+    const filterBlog = (id: string) => {
         setBlogs((prevBlogs) => prevBlogs.filter((blog) => blog.id !== id));
     };
 
@@ -73,10 +72,11 @@ const Blogs = () => {
                         title={blog.title}
                         post={blog.post}
                         excerpt={blog.excerpt}
+                        published={blog.published}
                         tags={blog.tags}
                         authorId={blog.authorId}
                         id={blog.id}
-                        deleteBlog={deleteBlog}
+                        filterBlog={filterBlog}
                         dateTime={blog.createdAt}
                     />
                 ))

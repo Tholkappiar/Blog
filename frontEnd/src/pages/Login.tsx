@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import axiosInstance from "../utils/axiosInstance";
 import { API_ROUTES } from "../utils/apiEndpoints";
 import useAuth from "../hooks/useAuth";
+import { HttpStatusCode } from "axios";
 
 const Login = () => {
     type User = {
@@ -80,7 +81,7 @@ const Login = () => {
                 { withCredentials: true }
             );
 
-            if (loginResponse.status === 200) {
+            if (loginResponse.status === HttpStatusCode.Ok) {
                 setUser({ token: loginResponse.data.token });
                 navigate(from, { replace: true });
             }
@@ -150,7 +151,7 @@ const Login = () => {
                         name="email"
                         value={userLogin.email}
                         onChange={handleChange}
-                        className="border-divider border-2 rounded-md p-1 sm:p-2 my-2 outline-none text-foreground"
+                        className="border-divider border-2 rounded-md p-1 sm:p-2 my-2 outline-none text-black"
                         placeholder="Email"
                     />
                     <label
@@ -165,7 +166,7 @@ const Login = () => {
                         name="password"
                         value={userLogin.password}
                         onChange={handleChange}
-                        className="border-divider border-2 rounded-md p-1 sm:p-2 my-2 outline-none text-foreground"
+                        className="border-divider border-2 rounded-md p-1 sm:p-2 my-2 outline-none text-black"
                         placeholder="Password"
                     />
                     <div className="space-x-4 my-4">
@@ -204,9 +205,9 @@ const Login = () => {
                                     viewBox="0 0 24 24"
                                     fill="none"
                                     stroke="currentColor"
-                                    stroke-width="2"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
                                 >
                                     <path d="M21 12a9 9 0 1 1-6.219-8.56" />
                                 </svg>

@@ -1,4 +1,11 @@
-import { Edit, Ellipsis, LoaderCircle, OctagonX } from "lucide-react";
+import {
+    Edit,
+    Ellipsis,
+    LoaderCircle,
+    LockKeyhole,
+    LockKeyholeOpen,
+    OctagonX,
+} from "lucide-react";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -10,13 +17,15 @@ import useAxiosPrivate from "@/hooks/useAxiosPrivate";
 import { API_ROUTES } from "@/utils/apiEndpoints";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { HttpStatusCode } from "axios";
 
 type BlogDropDown = {
     id: string;
-    deleteBlog: (id: string) => void;
+    published: boolean;
+    filterBlog: (id: string) => void;
 };
 
-export function BlogCardDropDown({ id, deleteBlog }: BlogDropDown) {
+export function BlogCardDropDown({ id, filterBlog, published }: BlogDropDown) {
     const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
     const axiosPrivate = useAxiosPrivate();
@@ -34,12 +43,25 @@ export function BlogCardDropDown({ id, deleteBlog }: BlogDropDown) {
                 API_ROUTES.BLOG.DELETE_BLOG(id)
             );
             if (response.status === 200) {
-                deleteBlog(id);
+                filterBlog(id);
             }
         } catch (err) {
             console.error("Error deleting blog:", err);
         } finally {
             setIsDeleting(false);
+        }
+    }
+
+    async function togglePublished() {
+        try {
+            const response = await axiosPrivate.post(
+                API_ROUTES.BLOG.TOGGLE_BLOG_PUBLISHED(id)
+            );
+            if (response.status === HttpStatusCode.Ok) {
+                filterBlog(id);
+            }
+        } catch (err) {
+            console.log(err);
         }
     }
 
@@ -52,6 +74,12 @@ export function BlogCardDropDown({ id, deleteBlog }: BlogDropDown) {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-48">
                 <DropdownMenuGroup>
+                    <DropdownMenuItem onClick={togglePublished}>
+                        {published ? <LockKeyhole /> : <LockKeyholeOpen />}
+                        <span>
+                            {published ? "Make Private" : "Make Public"}
+                        </span>
+                    </DropdownMenuItem>
                     <DropdownMenuItem onClick={EditBlog}>
                         <Edit />
                         <span>Edit</span>
