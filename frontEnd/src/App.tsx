@@ -3,8 +3,6 @@ import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Blogs from "./pages/Blogs";
 import Blog from "./pages/Blog";
-import { ThemeProvider, ThemeContext } from "./context/ThemeContext";
-import { useContext, useEffect } from "react";
 import Layout from "./components/Layout";
 import Home from "./components/Home";
 import RequireAuth from "./components/RequireAuth";
@@ -13,24 +11,17 @@ import PersistantLogin from "./Auth/PersistantLogin";
 import NotFound from "./pages/NotFound";
 import EditorPage from "./pages/EditorPage";
 import { EditorProviderContext } from "./context/EditorContext";
+import { ThemeProvider } from "./context/ThemeProvider";
 
 function App() {
     return (
-        <ThemeProvider>
+        <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
             <AppContent />
         </ThemeProvider>
     );
 }
 
 const AppContent = () => {
-    const context = useContext(ThemeContext);
-    if (!context) throw new Error("Issue in ThemeContext");
-    const { isDarkMode } = context;
-    useEffect(() => {
-        const theme = isDarkMode ? "dark" : "light";
-        document.body.className = theme;
-    }, [isDarkMode]);
-
     return (
         <div className="bg-background dark:bg-darkBackground dark:text-darkPrimary">
             <BrowserRouter>

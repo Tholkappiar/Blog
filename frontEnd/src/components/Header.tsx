@@ -1,21 +1,14 @@
-import { useContext } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import { ThemeContext } from "../context/ThemeContext";
 import { useEditorContext } from "../context/EditorContext";
 import { API_ROUTES } from "../utils/apiEndpoints";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
-import { Moon, Sun } from "lucide-react";
+import { ThemeToggle } from "./ThemeToggle";
 
 const Header = () => {
     const location = useLocation();
     const isEditorPage =
         location.pathname === "/post" ||
         location.pathname.split("/")[1] === "updateBlog";
-    const themeContext = useContext(ThemeContext);
-    if (!themeContext) {
-        throw new Error("ThemeContext must be used within a ThemeProvider");
-    }
-    const { toggleTheme, isDarkMode } = themeContext;
 
     const { editorState } = useEditorContext();
 
@@ -79,14 +72,7 @@ const Header = () => {
                             Publish
                         </button>
                     )}
-
-                    <div onClick={toggleTheme}>
-                        {isDarkMode ? (
-                            <Moon className="text-foreground" />
-                        ) : (
-                            <Sun className="text-orange-500" />
-                        )}
-                    </div>
+                    <ThemeToggle />
                 </div>
             </div>
         </div>

@@ -1,8 +1,6 @@
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import React, { useContext, useEffect } from "react";
 import "../styles/EditorPage.css";
-import { ThemeContext } from "../context/ThemeContext";
 
 const extensions = [StarterKit];
 
@@ -18,17 +16,6 @@ const BlogRender: React.FC<BlogProps> = ({ post }) => {
         editable: false,
         shouldRerenderOnTransaction: false,
     });
-
-    const themeContext = useContext(ThemeContext);
-    if (!themeContext) {
-        throw new Error("ThemeContext must be used within a ThemeProvider");
-    }
-    const { isDarkMode } = themeContext;
-
-    useEffect(() => {
-        const theme = isDarkMode ? "dark" : "light";
-        document.body.className = theme;
-    }, [isDarkMode]);
 
     return (
         <article className="mt-10">
