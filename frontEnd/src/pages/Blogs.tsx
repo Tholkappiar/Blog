@@ -12,11 +12,13 @@ interface Blog {
     tags: string[];
     id: string;
     deleteBlog: (id: string) => void;
+    createdAt: string;
 }
 
 const Blogs = () => {
     const [blogs, setBlogs] = useState<Blog[]>([]);
     const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
 
     const axiosPrivate = useAxiosPrivate();
 
@@ -33,6 +35,8 @@ const Blogs = () => {
                 setBlogs(data);
             } catch (err: unknown) {
                 setError((err as Error).message);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -59,20 +63,27 @@ const Blogs = () => {
             <p className="text-center mb-10 text-muted-foreground select-none">
                 think . write . share
             </p>
-            {blogs.length ? (
+
+            {loading ? (
+                <BlogCardShimmer />
+            ) : blogs.length > 0 ? (
                 blogs.map((blog) => (
                     <BlogCard
                         key={blog.id}
                         title={blog.title}
+                        post={blog.post}
                         excerpt={blog.excerpt}
                         tags={blog.tags}
                         authorId={blog.authorId}
                         id={blog.id}
                         deleteBlog={deleteBlog}
+                        dateTime={blog.createdAt}
                     />
                 ))
             ) : (
-                <BlogCardShimmer />
+                <div className="text-center text-muted-foreground">
+                    No blogs available at the moment.
+                </div>
             )}
         </div>
     );

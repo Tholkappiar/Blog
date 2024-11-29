@@ -1,16 +1,31 @@
 import { Link } from "react-router-dom";
 import { BlogCardDropDown } from "./DropDown";
+import { format } from "date-fns";
+import { extractTextFromJSON, getReadingTime } from "@/utils/blogUtils";
 
 interface BlogCardProps {
     title: string;
     excerpt: string;
+    post: string;
     authorId: string;
     id: string;
     tags: string[];
     deleteBlog: (id: string) => void;
+    dateTime: string;
 }
 
-const BlogCard = ({ title, id, excerpt, tags, deleteBlog }: BlogCardProps) => {
+const BlogCard = ({
+    title,
+    id,
+    excerpt,
+    tags,
+    dateTime,
+    post,
+    deleteBlog,
+}: BlogCardProps) => {
+    const extractedText = extractTextFromJSON(post);
+    const readingTime = getReadingTime(extractedText);
+
     return (
         <div className="group">
             <article
@@ -28,13 +43,13 @@ const BlogCard = ({ title, id, excerpt, tags, deleteBlog }: BlogCardProps) => {
                     <div className="flex flex-wrap items-center text-xs text-foreground justify-between">
                         <div className="my-2">
                             <span className="text-muted-foreground">
-                                {"May 2 2024"}
+                                {format(new Date(dateTime), "MMM d, yyyy")}
                             </span>
                             <span className="mx-2 text-muted-foreground">
                                 ·
                             </span>
                             <span className="mr-4 text-muted-foreground">
-                                {"5 min"}
+                                {readingTime}
                             </span>
                         </div>
                         <div className="flex flex-wrap gap-2 my-2">
