@@ -54,26 +54,24 @@ const Header = () => {
     }
 
     return (
-        <div className="bg-background">
-            <div
-                className={`border-2 border-border flex justify-between py-1 px-4 items-center w-3/4 md:1/2 lg:w-1/3 mx-auto rounded-xl my-4 bg-background`}
-            >
-                <Link to={"/blogs"}>
-                    <p className="font-Oranienbaum font-bold text-xl mx-2 text-foreground">
-                        Th
-                    </p>
-                </Link>
-                <div className="flex items-center space-x-4 sm:space-x-8">
-                    {isEditorPage && (
-                        <button
-                            className="dark:bg-green-700 bg-green-500 text-foreground text-sm p-1 px-2 rounded-lg font-semibold hover:opacity-70"
-                            onClick={publishBlog}
-                        >
-                            Publish
-                        </button>
-                    )}
-                    <ThemeToggle />
-                </div>
+        <div
+            className={`border-2 border-border flex justify-between py-1 px-4 items-center w-3/4 md:1/2 lg:w-1/3 mx-auto rounded-xl my-4 bg-background`}
+        >
+            <Link to={"/blogs"}>
+                <p className="font-Oranienbaum font-bold text-xl mx-2 text-foreground">
+                    Th
+                </p>
+            </Link>
+            <div className="flex items-center space-x-4 sm:space-x-8">
+                {isEditorPage && (
+                    <button
+                        className="dark:bg-green-700 bg-green-500 text-foreground text-sm p-1 px-2 rounded-lg font-semibold hover:opacity-70"
+                        onClick={publishBlog}
+                    >
+                        Publish
+                    </button>
+                )}
+                <ThemeToggle />
             </div>
         </div>
     );

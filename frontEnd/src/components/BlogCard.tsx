@@ -15,9 +15,9 @@ const BlogCard = ({ title, id, excerpt, tags, deleteBlog }: BlogCardProps) => {
         <div className="group">
             <article
                 key={id}
-                className="rounded-lg p-3 mb-8 border border-border transition-none relative group-hover:border-card-foreground"
+                className="rounded-lg p-3 mb-8 border border-gray-300 dark:border-gray-500 transition-none relative group-hover:border-card-foreground"
             >
-                <Link to={`/blog/${id}`}>
+                <Link to={`/blog/${id}`} className="transition-colors">
                     <h2 className="text-xl w-11/12 text-foreground mb-2 group-hover:underline underline-offset-4">
                         {title}
                     </h2>

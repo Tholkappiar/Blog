@@ -15,7 +15,7 @@ import { ThemeProvider } from "./context/ThemeProvider";
 
 function App() {
     return (
-        <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+        <ThemeProvider defaultTheme="dark" storageKey="theme">
             <AppContent />
         </ThemeProvider>
     );

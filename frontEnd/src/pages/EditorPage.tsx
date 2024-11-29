@@ -102,12 +102,14 @@ const EditorPage = () => {
         };
     }, []);
 
+    const [flag, setFlag] = useState(true);
     useEffect(() => {
-        if (editor && editorState.post) {
+        if (flag && editor && editorState.post) {
             editor.commands.setContent(JSON.parse(editorState.post));
             console.log("expensive");
+            setFlag(false);
         }
-    }, [editor, editorState.post]);
+    }, [editor, editorState.post, flag]);
 
     return (
         <EditorProviderContext>

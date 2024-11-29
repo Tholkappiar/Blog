@@ -51,6 +51,10 @@ module.exports = {
                     5: "hsl(var(--chart-5))",
                 },
             },
+            backgroundImage: {
+                "dark-grid": "url('/src/assets/svgs/darkGrid.svg')",
+                "light-grid": "url('/src/assets/svgs/lightGrid.svg')",
+            },
         },
     },
     plugins: [require("tailwindcss-animate")],
