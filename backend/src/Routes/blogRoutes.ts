@@ -2,7 +2,10 @@ import { Context, Hono, Next } from "hono";
 import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { HttpStatus } from "../utils/utils";
-import { authorizePostAccess, setId } from "../middleware/authMiddleware";
+import {
+    authMiddleware,
+    authorizePostAccess,
+} from "../middleware/authMiddleware";
 import {
     createPostInputSchema,
     updatePostInputSchema,
@@ -18,10 +21,8 @@ export const blogRoute = new Hono<{
     };
 }>();
 
-blogRoute.use(setId);
-
 blogRoute
-    .post("/", async (c) => {
+    .post("/", authMiddleware, async (c) => {
         const prisma = new PrismaClient({
             datasourceUrl: c.env.DATABASE_URL,
         }).$extends(withAccelerate());
@@ -63,7 +64,7 @@ blogRoute
             HttpStatus.CREATED
         );
     })
-    .put("/:id", authorizePostAccess, async (c) => {
+    .put("/:id", authMiddleware, authorizePostAccess, async (c) => {
         const prisma = new PrismaClient({
             datasourceUrl: c.env.DATABASE_URL,
         }).$extends(withAccelerate());
@@ -112,12 +113,22 @@ blogRoute
             datasourceUrl: c.env.DATABASE_URL,
         }).$extends(withAccelerate());
 
-        // const { userId: requestedUserId } = await c.req.json();
-
-        // If no userId is provided, fall back to the authenticated user's userId
-        // const userId = requestedUserId || c.get("userId");
-
-        const blogs = await prisma.post.findMany({});
+        const userId = c.get("userId");
+        let blogs;
+        if (userId) {
+            blogs = await prisma.post.findMany({
+                where: {
+                    authorId: userId,
+                },
+            });
+        } else {
+            blogs = await prisma.post.findMany({
+                where: {
+                    published: true,
+                },
+            });
+        }
+        console.log(blogs);
 
         if (blogs.length === 0) {
             return c.json({ blogs: [] }, HttpStatus.OK);
@@ -145,14 +156,14 @@ blogRoute
         }
 
         const blog = await prisma.post.findUnique({
-            where: { id: blogId },
+            where: { id: blogId, published: true },
         });
 
         return c.json({
             blog,
         });
     })
-    .delete("/:id", authorizePostAccess, async (c) => {
+    .delete("/:id", authMiddleware, authorizePostAccess, async (c) => {
         const prisma = new PrismaClient({
             datasourceUrl: c.env.DATABASE_URL,
         }).$extends(withAccelerate());
@@ -176,6 +187,48 @@ blogRoute
         return c.json({
             message: "Post deleted successfully",
         });
+    })
+    .post("/:id", authMiddleware, authorizePostAccess, async (c) => {
+        const prisma = new PrismaClient({
+            datasourceUrl: c.env.DATABASE_URL,
+        }).$extends(withAccelerate());
+        const blogId = c.req.param("id");
+        try {
+            const blog = await prisma.post.findUnique({
+                where: {
+                    id: blogId,
+                },
+            });
+            if (!blog) {
+                return c.json(
+                    { message: "Post not found" },
+                    HttpStatus.NOT_FOUND
+                );
+            }
+            const updatedPost = await prisma.post.update({
+                where: {
+                    id: blogId,
+                },
+                data: {
+                    published: !blog.published,
+                },
+            });
+            return c.json(
+                {
+                    message: `Post ${
+                        updatedPost.published ? "published" : "unpublished"
+                    }`,
+                    post: updatedPost,
+                },
+                HttpStatus.OK
+            );
+        } catch (error) {
+            console.error(error);
+            return c.json(
+                { message: "Something went wrong while toggling post status." },
+                HttpStatus.INTERNAL_SERVER_ERROR
+            );
+        }
     });
 
 // Function to validate post ID

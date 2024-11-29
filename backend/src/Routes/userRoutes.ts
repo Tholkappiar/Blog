@@ -223,6 +223,17 @@ userRoute.get("/refresh_token", async (c) => {
     }
 });
 
+userRoute.post("/logout", async (c) => {
+    setCookie(c, "refresh", "", {
+        httpOnly: true,
+        secure: true,
+        path: "/",
+        maxAge: 0,
+    });
+
+    return c.json({ message: "Successfully logged out" }, HttpStatus.OK);
+});
+
 // Function to generate the Access Token and Refresh Token
 async function generateToken(
     payload: Record<string, any>,

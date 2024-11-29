@@ -28,7 +28,7 @@ model Post {
   excerpt String
   post String
   tags String[]
-  published Boolean @default(false)
+  published Boolean @default(true)
   author User @relation(references: [id] , fields: [authorId])
   authorId String
   createdAt DateTime @default(now())

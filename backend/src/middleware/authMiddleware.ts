@@ -24,6 +24,7 @@ export async function authMiddleware(c: Context, next: Next) {
                 },
                 401
             );
+        c.set("userId", jwtVerify.userId);
         await next();
     } catch (e) {
         return c.json(
@@ -35,40 +36,40 @@ export async function authMiddleware(c: Context, next: Next) {
     }
 }
 
-export async function setId(c: Context, next: Next) {
-    const SECRET_KEY = c.env.SECRET_KEY;
-    const authorization = c.req.header("Authorization");
-    const jwt = authorization && authorization.split(" ")[1];
-    if (!jwt) {
-        return c.json(
-            {
-                message: "Invalid Authorization format",
-            },
-            HttpStatus.UNAUTHORIZED
-        );
-    }
+// export async function setId(c: Context, next: Next) {
+//     const SECRET_KEY = c.env.SECRET_KEY;
+//     const authorization = c.req.header("Authorization");
+//     const jwt = authorization && authorization.split(" ")[1];
+//     if (!jwt) {
+//         return c.json(
+//             {
+//                 message: "Invalid Authorization format",
+//             },
+//             HttpStatus.UNAUTHORIZED
+//         );
+//     }
 
-    try {
-        const jwtVerify = await verify(jwt, SECRET_KEY);
-        if (!jwtVerify) {
-            return c.json(
-                {
-                    message: "Unauthorized request",
-                },
-                HttpStatus.UNAUTHORIZED
-            );
-        }
-        c.set("userId", jwtVerify.userId);
-        await next();
-    } catch (e) {
-        return c.json(
-            {
-                message: "Invalid or Expired Token",
-            },
-            HttpStatus.UNAUTHORIZED
-        );
-    }
-}
+//     try {
+//         const jwtVerify = await verify(jwt, SECRET_KEY);
+//         if (!jwtVerify) {
+//             return c.json(
+//                 {
+//                     message: "Unauthorized request",
+//                 },
+//                 HttpStatus.UNAUTHORIZED
+//             );
+//         }
+//         c.set("userId", jwtVerify.userId);
+//         await next();
+//     } catch (e) {
+//         return c.json(
+//             {
+//                 message: "Invalid or Expired Token",
+//             },
+//             HttpStatus.UNAUTHORIZED
+//         );
+//     }
+// }
 
 export async function authorizePostAccess(c: Context, next: Next) {
     const userId = c.get("userId");
