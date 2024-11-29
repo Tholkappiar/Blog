@@ -31,4 +31,5 @@ model Post {
   published Boolean @default(false)
   author User @relation(references: [id] , fields: [authorId])
   authorId String
+  createdAt DateTime @default(now())
 }

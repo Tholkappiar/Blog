@@ -52,6 +52,7 @@ blogRoute
                 tags,
                 excerpt,
                 authorId: id,
+                createdAt: new Date(),
             },
         });
 
@@ -118,13 +119,8 @@ blogRoute
 
         const blogs = await prisma.post.findMany({});
 
-        if (!blogs.length) {
-            return c.json(
-                {
-                    message: "No blogs available.",
-                },
-                HttpStatus.NOT_FOUND
-            );
+        if (blogs.length === 0) {
+            return c.json({ blogs: [] }, HttpStatus.OK);
         }
 
         return c.json({
