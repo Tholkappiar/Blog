@@ -20,12 +20,11 @@ const Header = () => {
     const { title, post, tags, excerpt } = editorState || {};
 
     // Use authentication context to check if user is logged in
-    const { user, setUser, setPersist } = useAuth();
+    const { user, setUser, persist, setPersist } = useAuth();
 
     // Always call useAxiosPrivate, then conditionally use it or the public axios instance
     const axiosPrivate = useAxiosPrivate(); // Always call it first
-    console.log("token from header " + user.token);
-    const axios = user.token ? axiosPrivate : axiosInstance; // Conditional assignment after hook
+    const axios = persist ? axiosPrivate : axiosInstance; // Conditional assignment after hook
 
     const from = location.state?.page === "editPage";
     const params = useParams();

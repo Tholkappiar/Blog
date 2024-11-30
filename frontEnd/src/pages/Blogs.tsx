@@ -3,6 +3,8 @@ import BlogCard from "../components/BlogCard";
 import { BlogCardShimmer } from "../components/BlogShimmerEffects";
 import { API_ROUTES } from "../utils/apiEndpoints";
 import axiosInstance from "@/utils/axiosInstance";
+import useAuth from "@/hooks/useAuth";
+import useAxiosPrivate from "@/hooks/useAxiosPrivate";
 
 interface Blog {
     title: string;
@@ -21,10 +23,15 @@ const Blogs = () => {
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
 
+    const { user, persist } = useAuth();
+    const refresh = useAxiosPrivate();
+
     useEffect(() => {
         const fetchBlogs = async () => {
             try {
-                const response = await axiosInstance.get(
+                console.log("from blogs " + user.token);
+                const axiosInstanceToUse = persist ? refresh : axiosInstance;
+                const response = await axiosInstanceToUse.get(
                     API_ROUTES.BLOG.GET_ALL_BLOGS
                 );
                 if (!response) {

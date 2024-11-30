@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode, useState } from "react";
+import React, { createContext, ReactNode, useState, useEffect } from "react";
 
 interface AuthProviderType {
     children: ReactNode;
@@ -20,10 +20,18 @@ export const AuthContext = createContext<AuthContextType | undefined>(
 );
 
 const AuthProvider: React.FC<AuthProviderType> = ({ children }) => {
-    const [user, setUser] = useState<User>({ token: "" });
+    const [user, setUser] = useState<User>({
+        token: localStorage.getItem("accessToken") || "",
+    });
     const [persist, setPersist] = useState<boolean>(
-        (localStorage.getItem("persist") || false) === "true"
+        (localStorage.getItem("persist") || "false") === "true"
     );
+
+    useEffect(() => {
+        if (user.token) {
+            console.log("Token from AuthProvider:", user.token);
+        }
+    }, [user.token]);
 
     return (
         <AuthContext.Provider value={{ user, setUser, persist, setPersist }}>

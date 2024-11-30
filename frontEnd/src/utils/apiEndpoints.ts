@@ -7,6 +7,7 @@ type ApiRoutes = {
     };
     BLOG: {
         GET_ALL_BLOGS: string;
+        GET_MY_BLOGS: string;
         GET_BLOG: (id: string) => string;
         POST_BLOG: string;
         UPDATE_BLOG: (id: string) => string;
@@ -25,6 +26,7 @@ export const API_ROUTES: ApiRoutes = {
     },
     BLOG: {
         GET_ALL_BLOGS: "/blog/getAllBlogs",
+        GET_MY_BLOGS: "/blog/getMyBlogs",
         GET_BLOG: (id: string) => `/blog/${id}`,
         POST_BLOG: "/blog",
         UPDATE_BLOG: (id: string) => `/blog/${id}`,

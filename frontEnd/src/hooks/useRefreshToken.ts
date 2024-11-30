@@ -3,13 +3,18 @@ import { axiosPrivate } from "../utils/axiosInstance";
 import { API_ROUTES } from "../utils/apiEndpoints";
 
 const useRefreshToken = () => {
-    const { user, setUser } = useAuth();
+    const { setUser } = useAuth();
 
     const refresh = async () => {
-        const { data } = await axiosPrivate.get(API_ROUTES.REFRESH_TOKEN);
-        setUser({ token: data.token });
-        console.log(user);
-        return data.token;
+        try {
+            const { data } = await axiosPrivate.get(API_ROUTES.REFRESH_TOKEN);
+            setUser({ token: data.token });
+            console.log(data.token);
+            return data.token;
+        } catch (error) {
+            console.error("Error refreshing token", error);
+            throw error;
+        }
     };
 
     return refresh;

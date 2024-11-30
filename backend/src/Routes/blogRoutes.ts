@@ -5,6 +5,7 @@ import { HttpStatus } from "../utils/utils";
 import {
     authMiddleware,
     authorizePostAccess,
+    setId,
 } from "../middleware/authMiddleware";
 import {
     createPostInputSchema,
@@ -112,28 +113,37 @@ blogRoute
         const prisma = new PrismaClient({
             datasourceUrl: c.env.DATABASE_URL,
         }).$extends(withAccelerate());
-
-        const userId = c.get("userId");
-        let blogs;
-        if (userId) {
-            blogs = await prisma.post.findMany({
-                where: {
-                    authorId: userId,
-                },
-            });
-        } else {
-            blogs = await prisma.post.findMany({
-                where: {
-                    published: true,
-                },
-            });
-        }
-        console.log(blogs);
+        const blogs = await prisma.post.findMany({
+            where: {
+                published: true,
+            },
+        });
 
         if (blogs.length === 0) {
             return c.json({ blogs: [] }, HttpStatus.OK);
         }
 
+        return c.json({
+            blogs,
+        });
+    })
+    .get("/getMyBlogs", setId, async (c) => {
+        const prisma = new PrismaClient({
+            datasourceUrl: c.env.DATABASE_URL,
+        }).$extends(withAccelerate());
+        const userId = c.get("userId");
+        let blogs;
+        if (!userId) {
+            return c.json(
+                { message: "No User id provided." },
+                HttpStatus.UNAUTHORIZED
+            );
+        }
+        blogs = await prisma.post.findMany({
+            where: {
+                authorId: userId,
+            },
+        });
         return c.json({
             blogs,
         });
