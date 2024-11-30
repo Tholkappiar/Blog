@@ -13,6 +13,7 @@ const useRefreshToken = () => {
             return data.token;
         } catch (error) {
             console.error("Error refreshing token", error);
+            setUser({ token: "" });
             throw error;
         }
     };

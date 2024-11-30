@@ -23,16 +23,15 @@ const Blogs = () => {
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
 
-    const { user, persist } = useAuth();
+    const { user } = useAuth();
     const refresh = useAxiosPrivate();
 
     useEffect(() => {
         const fetchBlogs = async () => {
             try {
-                console.log("from blogs " + user.token);
-                const axiosInstanceToUse = persist ? refresh : axiosInstance;
+                const axiosInstanceToUse = user.token ? refresh : axiosInstance;
                 const response = await axiosInstanceToUse.get(
-                    API_ROUTES.BLOG.GET_ALL_BLOGS
+                    API_ROUTES.BLOG.GET_MY_BLOGS
                 );
                 if (!response) {
                     throw new Error("Failed to fetch blogs");

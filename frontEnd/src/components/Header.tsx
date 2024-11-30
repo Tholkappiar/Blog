@@ -1,8 +1,8 @@
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useEditorContext } from "../context/EditorContext";
 import { API_ROUTES } from "../utils/apiEndpoints";
-import useAxiosPrivate from "../hooks/useAxiosPrivate"; // For logged-in users
-import axiosInstance from "../utils/axiosInstance"; // Public Axios instance for unauthenticated users
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import axiosInstance from "../utils/axiosInstance";
 import { ThemeToggle } from "./ThemeToggle";
 import { LogOut } from "lucide-react";
 import { Button } from "./ui/button";
@@ -19,12 +19,10 @@ const Header = () => {
 
     const { title, post, tags, excerpt } = editorState || {};
 
-    // Use authentication context to check if user is logged in
-    const { user, setUser, persist, setPersist } = useAuth();
+    const { user, setUser, setPersist } = useAuth();
 
-    // Always call useAxiosPrivate, then conditionally use it or the public axios instance
-    const axiosPrivate = useAxiosPrivate(); // Always call it first
-    const axios = persist ? axiosPrivate : axiosInstance; // Conditional assignment after hook
+    const axiosPrivate = useAxiosPrivate();
+    const axios = user.token ? axiosPrivate : axiosInstance;
 
     const from = location.state?.page === "editPage";
     const params = useParams();
@@ -85,7 +83,6 @@ const Header = () => {
                 </p>
             </Link>
             <div className="flex items-center justify-center space-x-4 sm:space-x-8">
-                {/* Show Publish button only for editor pages and logged-in users */}
                 {isEditorPage && user.token && (
                     <button
                         className="dark:bg-green-700 bg-green-500 text-foreground text-sm p-1 px-2 rounded-lg font-semibold hover:opacity-70"
@@ -93,10 +90,11 @@ const Header = () => {
                     >
                         Publish
                     </button>
-                )}
+                )}{" "}
+                {user.token && <button>My Blogs</button>}
                 <div className="flex gap-2">
                     <ThemeToggle />
-                    {user.token && ( // Only show logout button if the user is logged in
+                    {user.token && (
                         <Button
                             variant={"ghost"}
                             size="sm"
