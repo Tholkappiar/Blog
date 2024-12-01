@@ -12,6 +12,7 @@ import useAxiosPrivate from "@/hooks/useAxiosPrivate";
 import { API_ROUTES } from "@/utils/apiEndpoints";
 import { BlogFullShimmer } from "@/components/BlogShimmerEffects";
 import { MenuBar } from "@/Editor/MenuBar";
+import { HttpStatusCode } from "axios";
 
 const EditorPage = () => {
     const { editorState, setEditorState } = useEditorContext();
@@ -68,7 +69,7 @@ const EditorPage = () => {
                 const response = await axiosPrivate.get(
                     API_ROUTES.BLOG.GET_BLOG(blogId)
                 );
-                if (response.status === 200) {
+                if (response.status === HttpStatusCode.Ok) {
                     const blog = response.data.blog;
                     setEditorState({
                         title: blog.title,

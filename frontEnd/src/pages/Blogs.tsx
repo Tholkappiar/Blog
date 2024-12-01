@@ -38,7 +38,7 @@ const Blogs = () => {
                 if (!response) {
                     throw new Error("Failed to fetch blogs");
                 }
-                const data = response.data.blogs;
+                const data = response.data?.blogs;
                 setBlogs(data);
             } catch (err: unknown) {
                 setError((err as Error).message);

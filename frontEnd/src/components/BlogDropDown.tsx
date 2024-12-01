@@ -44,7 +44,7 @@ export function BlogCardDropDown({ id, filterBlog, published }: BlogDropDown) {
             const response = await axiosPrivate.delete(
                 API_ROUTES.BLOG.DELETE_BLOG(id)
             );
-            if (response.status === 200) {
+            if (response.status === HttpStatusCode.Ok) {
                 filterBlog(id);
             }
         } catch (err) {

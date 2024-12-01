@@ -66,7 +66,7 @@ const Header = () => {
                         excerpt,
                     }
                 );
-                if (postResponse.status === 201) {
+                if (postResponse.status === HttpStatusCode.Created) {
                     navigate("/", { replace: true });
                     setIsPublished(true);
                 }

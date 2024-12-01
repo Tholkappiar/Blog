@@ -4,6 +4,7 @@ import useRefreshToken from "./useRefreshToken";
 import { axiosPrivate } from "../utils/axiosInstance";
 import { useNavigate } from "react-router-dom";
 import { API_ROUTES } from "@/utils/apiEndpoints";
+import { HttpStatusCode } from "axios";
 
 const useAxiosPrivate = () => {
     const { user, setUser } = useAuth();
@@ -27,7 +28,7 @@ const useAxiosPrivate = () => {
                 const prevRequest = error?.config;
 
                 if (
-                    error?.response?.status === 401 &&
+                    error?.response?.status === HttpStatusCode.Unauthorized &&
                     !prevRequest?.sent &&
                     prevRequest?.url !== API_ROUTES.REFRESH_TOKEN
                 ) {
