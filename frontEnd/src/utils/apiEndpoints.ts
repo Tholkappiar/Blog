@@ -4,7 +4,7 @@ type ApiRoutes = {
         LOGIN: string;
         SIGNUP: string;
         LOGOUT: string;
-        IS_AUTHENTICATED: string;
+        GET_PROFILE: string;
     };
     BLOG: {
         GET_ALL_BLOGS: string;
@@ -24,7 +24,7 @@ export const API_ROUTES: ApiRoutes = {
         LOGIN: "/user/signin",
         SIGNUP: "/user/signup",
         LOGOUT: "/user/logout",
-        IS_AUTHENTICATED: "/user/isAuthenticated",
+        GET_PROFILE: "/user/getProfile",
     },
     BLOG: {
         GET_ALL_BLOGS: "/blog/getAllBlogs",

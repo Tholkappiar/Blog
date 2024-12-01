@@ -16,7 +16,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { UserAvatar } from "./Avatar";
-import { LogoutDialog } from "./CustomDialogs";
+import { LogoutDialog, ProfileDialog } from "./CustomDialogs";
 import { useState } from "react";
 
 const Header = () => {
@@ -89,6 +89,8 @@ const Header = () => {
         }
     }
 
+    const [isProfile, setIsProfile] = useState<boolean>(false);
+
     return (
         <>
             <div
@@ -132,6 +134,14 @@ const Header = () => {
                                 </DropdownMenuLabel>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem
+                                    className="text-xs font-mono"
+                                    onClick={() =>
+                                        setIsProfile((prev) => !prev)
+                                    }
+                                >
+                                    Profile
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
                                     asChild
                                     className="text-xs font-mono"
                                 >
@@ -160,6 +170,10 @@ const Header = () => {
                     logout={handleLogout}
                     openDialog={isLogout}
                     setOpenDialog={setIsLogout}
+                />
+                <ProfileDialog
+                    openDialog={isProfile}
+                    setOpenDialog={setIsProfile}
                 />
             </div>
         </>

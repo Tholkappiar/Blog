@@ -11,6 +11,7 @@ type Blog = {
     post: string;
     title: string;
     tags: string[];
+    createdAt: string;
 };
 
 const Blog = () => {
@@ -50,7 +51,11 @@ const Blog = () => {
     return (
         <div className="w-full max-w-3xl 3xl:max-w-7xl mx-auto p-4 py-8">
             {blog ? (
-                <BlogDisplay title={blog?.title} post={blog?.post} />
+                <BlogDisplay
+                    title={blog?.title}
+                    post={blog?.post}
+                    createdAt={blog.createdAt}
+                />
             ) : (
                 <BlogFullShimmer />
             )}
