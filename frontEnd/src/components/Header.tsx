@@ -2,7 +2,7 @@ import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useEditorContext } from "../context/EditorContext";
 import { API_ROUTES } from "../utils/apiEndpoints";
 import { ThemeToggle } from "./ThemeToggle";
-import { LogOut } from "lucide-react";
+import { LoaderCircle, LogOut } from "lucide-react";
 import useAuth from "@/hooks/useAuth";
 import { HttpStatusCode } from "axios";
 import useAxiosInstance from "@/hooks/useAxiosInstance";
@@ -38,8 +38,10 @@ const Header = () => {
     const { id } = params;
     const navigate = useNavigate();
 
+    const [isPublished, setIsPublished] = useState<boolean>(true);
     async function publishBlog() {
         try {
+            setIsPublished(false);
             if (from && id) {
                 const updateResponse = await axios.put(
                     API_ROUTES.BLOG.UPDATE_BLOG(id),
@@ -52,6 +54,7 @@ const Header = () => {
                 );
                 if (updateResponse.status === HttpStatusCode.Ok) {
                     navigate("/", { replace: true });
+                    setIsPublished(true);
                 }
             } else {
                 const postResponse = await axios.post(
@@ -65,10 +68,12 @@ const Header = () => {
                 );
                 if (postResponse.status === 201) {
                     navigate("/", { replace: true });
+                    setIsPublished(true);
                 }
             }
         } catch (err) {
             console.log(err);
+            setIsPublished(true);
         }
     }
 
@@ -98,10 +103,18 @@ const Header = () => {
                     <div className="flex items-center gap-4">
                         {user.token && isEditorPage && (
                             <button
-                                className="dark:bg-green-700 bg-green-500 text-foreground text-xs py-1 px-2 rounded-lg hover:opacity-70"
+                                className={`dark:bg-green-700 bg-green-500 ${
+                                    !isPublished && "opacity-50"
+                                } text-foreground text-xs py-1 px-2 rounded-lg hover:opacity-70`}
                                 onClick={publishBlog}
+                                disabled={isPublished ? false : true}
                             >
-                                Publish
+                                <div className="flex gap-1">
+                                    {isPublished || (
+                                        <LoaderCircle className="animate-spin size-4 text-foreground" />
+                                    )}
+                                    <span>Publish</span>
+                                </div>
                             </button>
                         )}
                         <div className="flex">
