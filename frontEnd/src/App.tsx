@@ -32,20 +32,27 @@ const AppContent = () => {
                                 <Route path="/" element={<Home />} />
                                 <Route path="/login" element={<Login />} />
                                 <Route path="/signup" element={<Signup />} />
-                                <Route path="/blogs" element={<Blogs />} />
-                                <Route path="/blog/:id" element={<Blog />} />
-                                {/* <Route element={<PersistantLogin />}> */}
-                                <Route element={<RequireAuth />}>
+                                <Route element={<PersistantLogin />}>
+                                    <Route path="/blogs" element={<Blogs />} />
                                     <Route
-                                        path="/UpdateBlog/:id"
-                                        element={<EditorPage />}
+                                        path="/blog/:id"
+                                        element={<Blog />}
                                     />
-                                    <Route
-                                        path="/post"
-                                        element={<EditorPage />}
-                                    />
+                                    <Route element={<RequireAuth />}>
+                                        <Route
+                                            path="/UpdateBlog/:id"
+                                            element={<EditorPage />}
+                                        />
+                                        <Route
+                                            path="/post"
+                                            element={<EditorPage />}
+                                        />
+                                        <Route
+                                            path="/myBlogs"
+                                            element={<Blogs />}
+                                        />
+                                    </Route>
                                 </Route>
-                                {/* </Route> */}
                                 <Route path="*" element={<NotFound />}></Route>
                             </Route>
                         </Routes>

@@ -14,6 +14,7 @@ interface BlogCardProps {
     filterBlog: (id: string) => void;
     dateTime: string;
     published: boolean;
+    currentUserId: string | undefined;
 }
 
 const BlogCard = ({
@@ -25,6 +26,8 @@ const BlogCard = ({
     post,
     published,
     filterBlog,
+    currentUserId,
+    authorId,
 }: BlogCardProps) => {
     const extractedText = extractTextFromJSON(post);
     const readingTime = getReadingTime(extractedText);
@@ -69,7 +72,7 @@ const BlogCard = ({
                         </div>
                     </div>
                 </Link>
-                {user.token && (
+                {user.token && currentUserId === authorId && (
                     <div className="absolute top-3 right-3">
                         <BlogCardDropDown
                             id={id}

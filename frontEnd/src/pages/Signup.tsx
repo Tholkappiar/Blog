@@ -52,6 +52,8 @@ const Signup = () => {
     };
 
     async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+        setUser({ token: "", userId: "" });
+        localStorage.removeItem("persist");
         event.preventDefault();
 
         if (!validateForm()) return;
@@ -68,7 +70,10 @@ const Signup = () => {
             );
 
             if (signupResponse.status === HttpStatusCode.Created) {
-                setUser({ token: signupResponse?.data?.token });
+                setUser({
+                    token: signupResponse?.data?.token,
+                    userId: signupResponse?.data?.userId,
+                });
                 navigate(from, { replace: true });
             }
         } catch (err: any) {

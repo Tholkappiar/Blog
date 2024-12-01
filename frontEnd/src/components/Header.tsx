@@ -1,13 +1,12 @@
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useEditorContext } from "../context/EditorContext";
 import { API_ROUTES } from "../utils/apiEndpoints";
-import useAxiosPrivate from "../hooks/useAxiosPrivate";
-import axiosInstance from "../utils/axiosInstance";
 import { ThemeToggle } from "./ThemeToggle";
 import { LogOut } from "lucide-react";
 import { Button } from "./ui/button";
 import useAuth from "@/hooks/useAuth";
 import { HttpStatusCode } from "axios";
+import useAxiosInstance from "@/hooks/useAxiosInstance";
 
 const Header = () => {
     const location = useLocation();
@@ -21,8 +20,7 @@ const Header = () => {
 
     const { user, setUser, setPersist } = useAuth();
 
-    const axiosPrivate = useAxiosPrivate();
-    const axios = user.token ? axiosPrivate : axiosInstance;
+    const axios = useAxiosInstance();
 
     const from = location.state?.page === "editPage";
     const params = useParams();
@@ -70,6 +68,7 @@ const Header = () => {
             localStorage.setItem("persist", "false");
             setPersist(false);
             setUser({ token: "" });
+            navigate("/");
         }
     }
 
@@ -91,7 +90,16 @@ const Header = () => {
                         Publish
                     </button>
                 )}{" "}
-                {user.token && <button>My Blogs</button>}
+                {user.token && (
+                    <Button
+                        className="text-foreground"
+                        size={"sm"}
+                        variant={"ghost"}
+                        onClick={() => navigate("/myBlogs")}
+                    >
+                        My Blogs
+                    </Button>
+                )}
                 <div className="flex gap-2">
                     <ThemeToggle />
                     {user.token && (

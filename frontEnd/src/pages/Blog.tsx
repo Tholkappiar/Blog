@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import BlogDisplay from "../components/BlogDisplay";
 import { BlogFullShimmer } from "../components/BlogShimmerEffects";
 import { API_ROUTES } from "../utils/apiEndpoints";
-import axiosInstance from "@/utils/axiosInstance";
+import useAxiosInstance from "@/hooks/useAxiosInstance";
 
 type Blog = {
     authorId: string;
@@ -17,16 +17,15 @@ const Blog = () => {
     const { id } = useParams();
     const [blog, setBlog] = useState<Blog | null>(null);
     const [error, setError] = useState<string | null>(null);
-
+    const axiosInstanceToUse = useAxiosInstance();
     useEffect(() => {
         const fetchBlog = async () => {
             if (!id) {
                 setError("Invalid blog ID");
                 return;
             }
-
             try {
-                const response = await axiosInstance.get(
+                const response = await axiosInstanceToUse.get(
                     API_ROUTES.BLOG.GET_BLOG(id)
                 );
                 if (response.data && response.data.blog) {

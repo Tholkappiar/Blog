@@ -8,8 +8,8 @@ const useRefreshToken = () => {
     const refresh = async () => {
         try {
             const { data } = await axiosPrivate.get(API_ROUTES.REFRESH_TOKEN);
-            setUser({ token: data.token });
-            console.log(data.token);
+            setUser({ token: data.token, userId: data.userId });
+            console.log(data.userId);
             return data.token;
         } catch (error) {
             console.error("Error refreshing token", error);

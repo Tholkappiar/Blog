@@ -82,7 +82,10 @@ const Login = () => {
             );
 
             if (loginResponse.status === HttpStatusCode.Ok) {
-                setUser({ token: loginResponse.data.token });
+                setUser({
+                    token: loginResponse?.data?.token,
+                    userId: loginResponse?.data?.userId,
+                });
                 navigate(from, { replace: true });
             }
         } catch (err: unknown) {

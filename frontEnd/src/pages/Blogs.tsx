@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import BlogCard from "../components/BlogCard";
 import { BlogCardShimmer } from "../components/BlogShimmerEffects";
 import { API_ROUTES } from "../utils/apiEndpoints";
-import axiosInstance from "@/utils/axiosInstance";
 import useAuth from "@/hooks/useAuth";
-import useAxiosPrivate from "@/hooks/useAxiosPrivate";
+import { useLocation } from "react-router-dom";
+import useAxiosInstance from "@/hooks/useAxiosInstance";
 
 interface Blog {
     title: string;
@@ -24,15 +24,17 @@ const Blogs = () => {
     const [loading, setLoading] = useState<boolean>(true);
 
     const { user } = useAuth();
-    const refresh = useAxiosPrivate();
-
+    const location = useLocation();
+    const axiosInstanceToUse = useAxiosInstance();
     useEffect(() => {
         const fetchBlogs = async () => {
             try {
-                const axiosInstanceToUse = user.token ? refresh : axiosInstance;
-                const response = await axiosInstanceToUse.get(
-                    API_ROUTES.BLOG.GET_MY_BLOGS
-                );
+                const requestURL =
+                    location.pathname === "/myBlogs"
+                        ? API_ROUTES.BLOG.GET_MY_BLOGS
+                        : API_ROUTES.BLOG.GET_ALL_BLOGS;
+
+                const response = await axiosInstanceToUse.get(requestURL);
                 if (!response) {
                     throw new Error("Failed to fetch blogs");
                 }
@@ -46,7 +48,7 @@ const Blogs = () => {
         };
 
         fetchBlogs();
-    }, []);
+    }, [user.token]);
 
     const filterBlog = (id: string) => {
         setBlogs((prevBlogs) => prevBlogs.filter((blog) => blog.id !== id));
@@ -84,6 +86,7 @@ const Blogs = () => {
                         id={blog.id}
                         filterBlog={filterBlog}
                         dateTime={blog.createdAt}
+                        currentUserId={user.userId}
                     />
                 ))
             ) : (

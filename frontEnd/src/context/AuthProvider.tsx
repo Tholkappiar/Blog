@@ -6,6 +6,7 @@ interface AuthProviderType {
 
 interface User {
     token?: string;
+    userId?: string;
 }
 
 interface AuthContextType {
@@ -21,7 +22,8 @@ export const AuthContext = createContext<AuthContextType | undefined>(
 
 const AuthProvider: React.FC<AuthProviderType> = ({ children }) => {
     const [user, setUser] = useState<User>({
-        token: localStorage.getItem("accessToken") || "",
+        token: "",
+        userId: "",
     });
     const [persist, setPersist] = useState<boolean>(
         (localStorage.getItem("persist") || "false") === "true"
@@ -33,16 +35,15 @@ const AuthProvider: React.FC<AuthProviderType> = ({ children }) => {
         }
     }, [user.token]);
 
-    useEffect(() => {
-        if (user.token && persist) {
-            localStorage.setItem("accessToken", user.token);
-        } else {
-            localStorage.removeItem("accessToken");
-        }
-    }, [user.token, persist]);
-
     return (
-        <AuthContext.Provider value={{ user, setUser, persist, setPersist }}>
+        <AuthContext.Provider
+            value={{
+                user,
+                setUser,
+                persist,
+                setPersist,
+            }}
+        >
             {children}
         </AuthContext.Provider>
     );
