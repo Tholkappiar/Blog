@@ -1,7 +1,6 @@
 import {
     Edit,
     Ellipsis,
-    LoaderCircle,
     LockKeyhole,
     LockKeyholeOpen,
     OctagonX,
@@ -18,13 +17,7 @@ import { API_ROUTES } from "@/utils/apiEndpoints";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { HttpStatusCode } from "axios";
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-} from "./ui/dialog";
+import { DeleteDialog } from "./CustomDialogs";
 
 type BlogDropDown = {
     id: string;
@@ -60,7 +53,7 @@ export function BlogCardDropDown({ id, filterBlog, published }: BlogDropDown) {
             setIsDeleting(false);
         }
     }
-    const path = location.pathname === "/blogs";
+    const path = location.pathname === "/";
     async function togglePublished() {
         try {
             const response = await axiosPrivate.post(
@@ -113,33 +106,12 @@ export function BlogCardDropDown({ id, filterBlog, published }: BlogDropDown) {
                     </DropdownMenuGroup>
                 </DropdownMenuContent>
             </DropdownMenu>
-            <Dialog open={openDialog} onOpenChange={setOpenDialog}>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>
-                            Are you absolutely sure to delete this Blog?
-                        </DialogTitle>
-                        <DialogDescription>
-                            This action cannot be undone. This will permanently
-                            delete your Blog and remove your data from our
-                            servers.
-                        </DialogDescription>
-                        <button
-                            onClick={deleteBlog}
-                            className="bg-destructive text-white font-semibold text-sm px-4 py-2 rounded"
-                        >
-                            {isDeleting ? (
-                                <div className="flex gap-2 items-center justify-center">
-                                    <LoaderCircle className="animate-spin" />
-                                    <span>Deleting...</span>
-                                </div>
-                            ) : (
-                                <p>Confirm Delete</p>
-                            )}
-                        </button>
-                    </DialogHeader>
-                </DialogContent>
-            </Dialog>
+            <DeleteDialog
+                openDialog={openDialog}
+                setOpenDialog={setOpenDialog}
+                deleteBlog={deleteBlog}
+                isDeleting={isDeleting}
+            />
         </>
     );
 }

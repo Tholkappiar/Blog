@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { BlogCardDropDown } from "./DropDown";
+import { BlogCardDropDown } from "./BlogDropDown";
 import { format } from "date-fns";
 import { extractTextFromJSON, getReadingTime } from "@/utils/blogUtils";
 import useAuth from "@/hooks/useAuth";

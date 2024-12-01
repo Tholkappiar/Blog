@@ -3,10 +3,21 @@ import { useEditorContext } from "../context/EditorContext";
 import { API_ROUTES } from "../utils/apiEndpoints";
 import { ThemeToggle } from "./ThemeToggle";
 import { LogOut } from "lucide-react";
-import { Button } from "./ui/button";
 import useAuth from "@/hooks/useAuth";
 import { HttpStatusCode } from "axios";
 import useAxiosInstance from "@/hooks/useAxiosInstance";
+
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { UserAvatar } from "./Avatar";
+import { LogoutDialog } from "./CustomDialogs";
+import { useState } from "react";
 
 const Header = () => {
     const location = useLocation();
@@ -40,7 +51,7 @@ const Header = () => {
                     }
                 );
                 if (updateResponse.status === HttpStatusCode.Ok) {
-                    navigate("/blogs", { replace: true });
+                    navigate("/", { replace: true });
                 }
             } else {
                 const postResponse = await axios.post(
@@ -53,7 +64,7 @@ const Header = () => {
                     }
                 );
                 if (postResponse.status === 201) {
-                    navigate("/blogs", { replace: true });
+                    navigate("/", { replace: true });
                 }
             }
         } catch (err) {
@@ -62,6 +73,7 @@ const Header = () => {
     }
 
     // Logout function
+    const [isLogout, setIsLogout] = useState<boolean>(false);
     async function handleLogout() {
         const response = await axios.post(API_ROUTES.USER.LOGOUT);
         if (response.status === HttpStatusCode.Ok) {
@@ -73,48 +85,71 @@ const Header = () => {
     }
 
     return (
-        <div
-            className={`border-2 border-border flex justify-between py-1 px-4 items-center w-3/4 md:1/2 lg:w-1/3 mx-auto rounded-xl my-4 bg-background`}
-        >
-            <Link to={"/blogs"}>
-                <p className="font-Oranienbaum font-bold text-xl mx-2 text-foreground">
-                    Th
-                </p>
-            </Link>
-            <div className="flex items-center justify-center space-x-4 sm:space-x-8">
-                {isEditorPage && user.token && (
-                    <button
-                        className="dark:bg-green-700 bg-green-500 text-foreground text-sm p-1 px-2 rounded-lg font-semibold hover:opacity-70"
-                        onClick={publishBlog}
-                    >
-                        Publish
-                    </button>
-                )}{" "}
-                {user.token && (
-                    <Button
-                        className="text-foreground"
-                        size={"sm"}
-                        variant={"ghost"}
-                        onClick={() => navigate("/myBlogs")}
-                    >
-                        My Blogs
-                    </Button>
-                )}
-                <div className="flex gap-2">
-                    <ThemeToggle />
+        <>
+            <div
+                className={`border-2 border-border flex justify-between py-1 px-4 items-center w-3/4 md:1/2 lg:w-1/3 mx-auto rounded-xl my-4 bg-background`}
+            >
+                <Link to={"/"}>
+                    <p className="font-Oranienbaum font-bold text-xl mx-2 text-foreground">
+                        Th
+                    </p>
+                </Link>
+                <div className="flex items-center justify-center space-x-4 sm:space-x-8">
+                    <div className="flex items-center gap-4">
+                        {user.token && isEditorPage && (
+                            <button
+                                className="dark:bg-green-700 bg-green-500 text-foreground text-xs py-1 px-2 rounded-lg hover:opacity-70"
+                                onClick={publishBlog}
+                            >
+                                Publish
+                            </button>
+                        )}
+                        <div className="flex">
+                            <ThemeToggle />
+                        </div>
+                    </div>
                     {user.token && (
-                        <Button
-                            variant={"ghost"}
-                            size="sm"
-                            className="focus-visible:ring-offset-0 focus-visible:ring-0"
-                            onClick={handleLogout}
-                        >
-                            <LogOut className="text-foreground transition-none" />
-                        </Button>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger>
+                                <UserAvatar />
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent>
+                                <DropdownMenuLabel className="text-xs font-mono">
+                                    My Account
+                                </DropdownMenuLabel>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem
+                                    asChild
+                                    className="text-xs font-mono"
+                                >
+                                    <Link to={"/myBlogs"}>My Blogs</Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    asChild
+                                    className="text-xs font-mono"
+                                >
+                                    <Link to={"/post"}>Post Blog</Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    onClick={() => setIsLogout((prev) => !prev)}
+                                    className="text-xs font-mono text-destructive"
+                                >
+                                    <LogOut className="text-destructive transition-none" />
+                                    <span className="text-destructive">
+                                        Logout
+                                    </span>
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     )}
                 </div>
+                <LogoutDialog
+                    logout={handleLogout}
+                    openDialog={isLogout}
+                    setOpenDialog={setIsLogout}
+                />
             </div>
-        </div>
+        </>
     );
 };
 

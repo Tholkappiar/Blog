@@ -4,7 +4,6 @@ import Login from "./pages/Login";
 import Blogs from "./pages/Blogs";
 import Blog from "./pages/Blog";
 import Layout from "./components/Layout";
-import Home from "./components/Home";
 import RequireAuth from "./components/RequireAuth";
 import AuthProvider from "./context/AuthProvider";
 import PersistantLogin from "./Auth/PersistantLogin";
@@ -29,11 +28,10 @@ const AppContent = () => {
                     <EditorProviderContext>
                         <Routes>
                             <Route element={<Layout />}>
-                                <Route path="/" element={<Home />} />
                                 <Route path="/login" element={<Login />} />
                                 <Route path="/signup" element={<Signup />} />
                                 <Route element={<PersistantLogin />}>
-                                    <Route path="/blogs" element={<Blogs />} />
+                                    <Route path="/" element={<Blogs />} />
                                     <Route
                                         path="/blog/:id"
                                         element={<Blog />}
