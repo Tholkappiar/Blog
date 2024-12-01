@@ -88,7 +88,7 @@ const Login = () => {
                 });
                 navigate(from, { replace: true });
             }
-        } catch (err: unknown) {
+        } catch (err: any) {
             const status = err.response?.status;
             if (status === 400) {
                 setError("Invalid input. Please try again.");

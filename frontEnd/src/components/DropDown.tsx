@@ -27,6 +27,7 @@ type BlogDropDown = {
 
 export function BlogCardDropDown({ id, filterBlog, published }: BlogDropDown) {
     const [isDeleting, setIsDeleting] = useState<boolean>(false);
+    const [isPublished, setIsPublished] = useState<boolean>(published);
 
     const axiosPrivate = useAxiosPrivate();
 
@@ -51,14 +52,16 @@ export function BlogCardDropDown({ id, filterBlog, published }: BlogDropDown) {
             setIsDeleting(false);
         }
     }
-
+    const path = location.pathname === "/blogs";
     async function togglePublished() {
         try {
             const response = await axiosPrivate.post(
                 API_ROUTES.BLOG.TOGGLE_BLOG_PUBLISHED(id)
             );
+
             if (response.status === HttpStatusCode.Ok) {
-                filterBlog(id);
+                setIsPublished((prev) => !prev);
+                if (path) filterBlog(id);
             }
         } catch (err) {
             console.log(err);
@@ -75,9 +78,9 @@ export function BlogCardDropDown({ id, filterBlog, published }: BlogDropDown) {
             <DropdownMenuContent className="w-48">
                 <DropdownMenuGroup>
                     <DropdownMenuItem onClick={togglePublished}>
-                        {published ? <LockKeyhole /> : <LockKeyholeOpen />}
+                        {isPublished ? <LockKeyhole /> : <LockKeyholeOpen />}
                         <span>
-                            {published ? "Make Private" : "Make Public"}
+                            {isPublished ? "Make Private" : "Make Public"}
                         </span>
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={EditBlog}>
