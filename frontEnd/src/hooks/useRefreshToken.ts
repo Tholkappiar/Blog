@@ -9,12 +9,12 @@ const useRefreshToken = () => {
         try {
             const { data } = await axiosPrivate.get(API_ROUTES.REFRESH_TOKEN);
             setUser({ token: data.token, userId: data.userId });
-            console.log(data.userId);
+            console.log("New token:", data.token);
             return data.token;
         } catch (error) {
-            console.error("Error refreshing token", error);
-            setUser({ token: "" });
-            throw error;
+            console.error("Error refreshing token:", error);
+            setUser({ token: "", userId: "" });
+            throw new Error("Refresh token expired or invalid");
         }
     };
 

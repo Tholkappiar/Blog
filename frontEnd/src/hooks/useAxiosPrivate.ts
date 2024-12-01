@@ -2,10 +2,13 @@ import { useEffect } from "react";
 import useAuth from "./useAuth";
 import useRefreshToken from "./useRefreshToken";
 import { axiosPrivate } from "../utils/axiosInstance";
+import { useNavigate } from "react-router-dom";
+import { API_ROUTES } from "@/utils/apiEndpoints";
 
 const useAxiosPrivate = () => {
-    const { user } = useAuth();
+    const { user, setUser } = useAuth();
     const refresh = useRefreshToken();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const requestIntercept = axiosPrivate.interceptors.request.use(
@@ -22,14 +25,31 @@ const useAxiosPrivate = () => {
             (response) => response,
             async (error) => {
                 const prevRequest = error?.config;
-                if (error?.response?.status === 401 && !prevRequest?.sent) {
+
+                if (
+                    error?.response?.status === 401 &&
+                    !prevRequest?.sent &&
+                    prevRequest?.url !== API_ROUTES.REFRESH_TOKEN
+                ) {
                     prevRequest.sent = true;
-                    const newAccessToken = await refresh();
-                    prevRequest.headers[
-                        "Authorization"
-                    ] = `Bearer ${newAccessToken}`;
-                    return axiosPrivate(prevRequest);
+                    try {
+                        const newAccessToken = await refresh();
+                        prevRequest.headers[
+                            "Authorization"
+                        ] = `Bearer ${newAccessToken}`;
+                        return axiosPrivate(prevRequest);
+                    } catch (refreshError) {
+                        console.error(
+                            "Refresh token failed, logging out:",
+                            refreshError
+                        );
+                        setUser({ token: "", userId: "" });
+                        localStorage.setItem("persist", "false");
+                        navigate("/login");
+                        return Promise.reject(refreshError);
+                    }
                 }
+
                 return Promise.reject(error);
             }
         );
@@ -38,7 +58,7 @@ const useAxiosPrivate = () => {
             axiosPrivate.interceptors.request.eject(requestIntercept);
             axiosPrivate.interceptors.response.eject(responseIntercept);
         };
-    }, [user, refresh]);
+    }, [user, refresh, navigate, setUser]);
 
     return axiosPrivate;
 };
