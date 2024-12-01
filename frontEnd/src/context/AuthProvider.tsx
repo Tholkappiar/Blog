@@ -30,10 +30,8 @@ const AuthProvider: React.FC<AuthProviderType> = ({ children }) => {
     );
 
     useEffect(() => {
-        if (user.token) {
-            console.log("Token from AuthProvider:", user.token);
-        }
-    }, [user.token]);
+        localStorage.setItem("persist", persist.toString());
+    }, [persist]);
 
     return (
         <AuthContext.Provider

@@ -106,7 +106,7 @@ const Signup = () => {
                         Start your Journey with us!
                     </p>
                     {error && (
-                        <div className="bg-destructive rounded-lg font-bold p-2 text-destructive-foreground text-center mt-4">
+                        <div className="bg-destructive rounded-lg font-semibold p-2 text-destructive-foreground text-center mt-4">
                             {error}
                         </div>
                     )}

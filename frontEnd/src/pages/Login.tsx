@@ -138,7 +138,7 @@ const Login = () => {
                 </p>
                 <div className="flex flex-col w-2/3 mx-auto mt-10">
                     {error && (
-                        <p className="bg-destructive p-2 rounded-lg font-bold text-destructive-foreground text-center mb-4">
+                        <p className="bg-destructive p-2 rounded-lg font-semibold text-destructive-foreground text-center mb-4">
                             {error}
                         </p>
                     )}
