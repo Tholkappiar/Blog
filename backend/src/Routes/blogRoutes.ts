@@ -148,15 +148,16 @@ blogRoute
             blogs,
         });
     })
-    .get("/:id", async (c) => {
+    .get("/:id", setId, async (c) => {
         const prisma = new PrismaClient({
             datasourceUrl: c.env.DATABASE_URL,
         }).$extends(withAccelerate());
 
         const blogId = c.req.param("id");
+        const userId = c.get("userId");
 
         // Validate ID
-        if (!(await validatePostId(c, blogId))) {
+        if (!validatePostId(c, blogId)) {
             return c.json(
                 {
                     message: "No blog found.",
@@ -164,11 +165,33 @@ blogRoute
                 HttpStatus.NOT_FOUND
             );
         }
-
-        const blog = await prisma.post.findUnique({
-            where: { id: blogId, published: true },
-        });
-
+        let blog;
+        if (!userId) {
+            blog = await prisma.post.findUnique({
+                where: { id: blogId, published: true },
+            });
+        } else {
+            blog = await prisma.post.findUnique({
+                where: { id: blogId },
+            });
+            if (blog && !blog.published && blog.authorId !== userId) {
+                return c.json(
+                    {
+                        message:
+                            "You do not have permission to view this private blog.",
+                    },
+                    HttpStatus.FORBIDDEN
+                );
+            }
+        }
+        if (!blog) {
+            return c.json(
+                {
+                    message: "Blog not found.",
+                },
+                HttpStatus.NOT_FOUND
+            );
+        }
         return c.json({
             blog,
         });
@@ -180,7 +203,7 @@ blogRoute
 
         const blogId = c.req.param("id");
         // Validate ID
-        if (!(await validatePostId(c, blogId))) {
+        if (!validatePostId(c, blogId)) {
             return c.json(
                 {
                     message: "Post not found.",

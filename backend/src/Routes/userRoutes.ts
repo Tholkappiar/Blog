@@ -94,6 +94,7 @@ userRoute.post("/signup", async (c) => {
         return c.json(
             {
                 token: accessToken,
+                userId: response.id,
             },
             HttpStatus.CREATED
         );
@@ -174,6 +175,7 @@ userRoute.post("/signin", async (c) => {
         return c.json(
             {
                 token: accessToken,
+                userId: user.id,
             },
             HttpStatus.OK
         );
@@ -213,7 +215,7 @@ userRoute.get("/refresh_token", async (c) => {
             "access"
         );
 
-        return c.json({ token }, HttpStatus.OK);
+        return c.json({ token, userId: payload.userId }, HttpStatus.OK);
     } catch (e) {
         console.error(e);
         return c.json(
