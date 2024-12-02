@@ -1,10 +1,12 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import useAuth from "@/hooks/useAuth";
 
 export const UserAvatar = () => {
+    const { user } = useAuth();
     return (
-        <Avatar className="size-6">
-            <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback>CN</AvatarFallback>
-        </Avatar>
+        <div className="size-7 bg-gray-600 dark:bg-secondary flex items-center justify-center rounded-full">
+            <p className="text-sm font-mono text-white">
+                {user.username ? user.username.charAt(0).toUpperCase() : "U"}
+            </p>
+        </div>
     );
 };

@@ -106,7 +106,7 @@ export const ProfileDialog: React.FC<ProfileDialogProps> = ({
     setOpenDialog,
 }) => {
     const axiosToUse = useAxiosPrivate();
-    const { user } = useAuth();
+    const { user, setUser } = useAuth();
 
     const [profile, setProfile] = useState<Profile | undefined>(undefined);
 
@@ -114,6 +114,11 @@ export const ProfileDialog: React.FC<ProfileDialogProps> = ({
         try {
             const response = await axiosToUse.get(API_ROUTES.USER.GET_PROFILE);
             setProfile(response.data);
+            setUser((prev) => ({
+                ...prev,
+                username: response.data.name,
+            }));
+
             console.log(response.data);
         } catch (error) {
             console.error("Error fetching profile information", error);

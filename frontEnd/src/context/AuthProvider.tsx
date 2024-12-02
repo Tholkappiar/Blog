@@ -7,6 +7,7 @@ interface AuthProviderType {
 interface User {
     token?: string;
     userId?: string;
+    username?: string;
 }
 
 interface AuthContextType {
