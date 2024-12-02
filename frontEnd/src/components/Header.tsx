@@ -97,12 +97,12 @@ const Header = () => {
                 className={`border-2 border-border flex justify-between py-1 px-4 items-center w-3/4 md:1/2 lg:w-1/3 mx-auto rounded-xl my-4 bg-background`}
             >
                 <Link to={"/"}>
-                    <p className="font-Oranienbaum font-bold text-xl mx-2 text-foreground">
+                    <p className="font-Oranienbaum font-bold text-lg md:text-xl mx-2 text-foreground">
                         Th
                     </p>
                 </Link>
-                <div className="flex items-center justify-center space-x-4 sm:space-x-8">
-                    <div className="flex items-center gap-4">
+                <div className="flex items-center justify-center space-x-2 sm:space-x-8">
+                    <div className="flex items-center gap-1 sm:gap-4">
                         {user.token && isEditorPage && (
                             <button
                                 className={`dark:bg-green-700 bg-green-500 ${

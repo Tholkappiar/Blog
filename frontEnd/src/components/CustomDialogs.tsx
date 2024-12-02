@@ -26,9 +26,9 @@ export const DeleteDialog: React.FC<DeleteDialogProps> = ({
 }) => {
     return (
         <Dialog open={openDialog} onOpenChange={setOpenDialog}>
-            <DialogContent>
+            <DialogContent className="w-11/12">
                 <DialogHeader>
-                    <DialogTitle>
+                    <DialogTitle className="leading-6">
                         Are you absolutely sure to delete this Blog?
                     </DialogTitle>
                     <DialogDescription>
@@ -70,7 +70,7 @@ export const LogoutDialog: React.FC<LogoutDialogProps> = ({
 }) => {
     return (
         <Dialog open={openDialog} onOpenChange={setOpenDialog}>
-            <DialogContent>
+            <DialogContent className="w-11/12">
                 <DialogHeader>
                     <DialogTitle>Are you sure ?</DialogTitle>
                     <DialogDescription>
@@ -133,7 +133,7 @@ export const ProfileDialog: React.FC<ProfileDialogProps> = ({
 
     return (
         <Dialog open={openDialog} onOpenChange={setOpenDialog}>
-            <DialogContent>
+            <DialogContent className="p-4 sm:p-6 md:p-8 w-11/12">
                 <DialogHeader>
                     <DialogTitle>Profile</DialogTitle>
                 </DialogHeader>

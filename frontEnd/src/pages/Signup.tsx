@@ -10,12 +10,14 @@ const Signup = () => {
         username: string;
         email: string;
         password: string;
+        confirmPassword: string;
     };
 
     const [newUser, setNewUser] = useState<NewUser>({
         username: "",
         email: "",
         password: "",
+        confirmPassword: "",
     });
 
     const [error, setError] = useState<string | null>(null);
@@ -48,12 +50,14 @@ const Signup = () => {
             setError("Password must be at least 8 characters");
             return false;
         }
+        if (newUser.password !== newUser.confirmPassword) {
+            setError("Passwords do not match");
+            return false;
+        }
         return true;
     };
 
     async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-        setUser({ token: "", userId: "" });
-        localStorage.removeItem("persist");
         event.preventDefault();
 
         if (!validateForm()) return;
@@ -94,26 +98,26 @@ const Signup = () => {
 
     return (
         <>
-            <div className="lg:flex">
+            <div className="flex flex-1 h-full font-mono">
                 <form
                     onSubmit={handleSubmit}
-                    className="lg:w-1/2 flex flex-col justify-center items-center h-dvh lg:min-h-0"
+                    className="flex-1 lg:w-1/2 flex flex-col justify-center items-center"
                 >
-                    <p className="text-center text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground">
+                    <p className="px-2 text-center text-xl lg:text-2xl font-bold text-foreground">
                         Create an Account
                     </p>
-                    <p className="text-center text-lg sm:text-xl text-foreground font-semibold my-2">
+                    <p className="px-2 text-center text-lg lg:text-xl text-muted-foreground font-semibold my-2">
                         Start your Journey with us!
                     </p>
                     {error && (
-                        <div className="bg-destructive rounded-lg font-semibold p-2 text-destructive-foreground text-center mt-4">
+                        <div className="bg-destructive rounded-lg font-semibold p-2 text-destructive-foreground text-center mt-4 text-xs lg:text-sm">
                             {error}
                         </div>
                     )}
-                    <div className="flex flex-col w-2/3 mx-auto mt-10">
+                    <div className="flex flex-col w-5/6 md:w-2/3  mx-auto mt-10">
                         <label
                             htmlFor="username"
-                            className="font-semibold sm:text-lg text-foreground"
+                            className="font-semibold text-sm text-foreground"
                         >
                             Username
                         </label>
@@ -123,12 +127,12 @@ const Signup = () => {
                             type="text"
                             value={newUser.username}
                             onChange={handleChange}
-                            className="border-divider border-2 rounded-md p-1 sm:p-2 my-2 outline-none text-black"
+                            className="border-divider border-2 rounded-md px-1 py-2 sm:p-2 my-2 outline-none text-black text-sm"
                             placeholder="Username"
                         />
                         <label
                             htmlFor="email"
-                            className="font-semibold sm:text-lg text-foreground"
+                            className="font-semibold text-sm text-foreground"
                         >
                             Email
                         </label>
@@ -138,12 +142,12 @@ const Signup = () => {
                             type="email"
                             value={newUser.email}
                             onChange={handleChange}
-                            className="border-divider border-2 rounded-md p-1 sm:p-2 my-2 outline-none text-black"
+                            className="border-divider border-2 rounded-md px-1 py-2 sm:p-2 my-2 outline-none text-black text-sm"
                             placeholder="Email"
                         />
                         <label
                             htmlFor="password"
-                            className="font-semibold sm:text-lg text-foreground"
+                            className="font-semibold text-sm text-foreground"
                         >
                             Password
                         </label>
@@ -153,14 +157,29 @@ const Signup = () => {
                             type="password"
                             value={newUser.password}
                             onChange={handleChange}
-                            className="border-divider border-2 rounded-md p-1 sm:p-2 my-2 outline-none text-black"
+                            className="border-divider border-2 rounded-md px-1 py-2 sm:p-2 my-2 outline-none text-black text-sm"
                             placeholder="Password"
                         />
-                        <p className="text-foreground mt-4 text-center font-medium sm:text-lg">
+                        <label
+                            htmlFor="confirmPassword"
+                            className="font-semibold text-sm text-foreground"
+                        >
+                            Confirm Password
+                        </label>
+                        <input
+                            id="confirmPassword"
+                            name="confirmPassword"
+                            type="password"
+                            value={newUser.confirmPassword}
+                            onChange={handleChange}
+                            className="border-divider border-2 rounded-md px-1 py-2 sm:p-2 my-2 outline-none text-black text-sm"
+                            placeholder="Confirm Password"
+                        />
+                        <p className="text-secondary-foreground mt-4 text-center font-medium text-sm">
                             Already have an Account?{" "}
                             <Link
                                 to={"/login"}
-                                className="underline font-semibold sm:text-lg text-foreground"
+                                className="underline font-semibold text-sm text-foreground"
                             >
                                 Sign In
                             </Link>
@@ -168,7 +187,9 @@ const Signup = () => {
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className="bg-primary text-foreground hover:opacity-70 font-semibold sm:text-lg lg:font-medium rounded-lg p-2 sm:p-3 my-3"
+                            className={`bg-primary text-foreground hover:opacity-70 font-semibold text-sm lg:font-medium rounded-lg p-2 my-3 ${
+                                isLoading ? "opacity-50" : ""
+                            }`}
                         >
                             {isLoading ? (
                                 <div className="flex justify-center items-center gap-4">
@@ -198,18 +219,18 @@ const Signup = () => {
                         </button>
                     </div>
                 </form>
-                <div className="w-1/2 h-dvh p-10 lg:flex flex-col justify-center content-center hidden bg-muted">
+                <div className="w-1/2 p-10 lg:flex flex-col justify-center content-center hidden bg-muted">
                     <div className="w-4/5 mx-auto">
-                        <p className="font-bold text-3xl text-foreground">
-                            "The customer service received for is exceptional.
-                            The support team went above and beyond to address my
+                        <p className="font-bold text-sm lg:text-lg text-foreground">
+                            "The customer service received is exceptional. The
+                            support team went above and beyond to address my
                             concerns."
                         </p>
                         <div className="mt-4">
-                            <p className="font-bold text-lg text-muted-foreground">
+                            <p className="font-bold text-sm lg:text-base text-muted-foreground">
                                 John WinField
                             </p>
-                            <p className="text-lg text-muted-foreground font-semibold">
+                            <p className="text-muted-foreground text-sm font-semibold">
                                 CEO, ACME Inc
                             </p>
                         </div>

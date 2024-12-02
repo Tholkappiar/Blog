@@ -41,11 +41,11 @@ const BlogCard = ({
                 className="rounded-lg p-3 mb-8 border border-gray-300 dark:border-gray-500 transition-none relative group-hover:border-card-foreground"
             >
                 <Link to={`/blog/${id}`} className="transition-colors">
-                    <h2 className="text-xl w-11/12 text-foreground mb-2 group-hover:underline underline-offset-4">
+                    <h2 className="text-lg md:text-xl w-11/12 text-foreground mb-2 group-hover:underline underline-offset-4">
                         {title}
                     </h2>
 
-                    <p className="text-secondary-foreground mb-4 text-sm line-clamp-2">
+                    <p className="text-secondary-foreground mb-4 text-sm md:text-base line-clamp-2">
                         {excerpt}
                     </p>
                     <div className="flex flex-wrap items-center text-xs text-foreground justify-between">
