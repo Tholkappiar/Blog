@@ -10,6 +10,7 @@ import {
 import { getCookie, setCookie } from "hono/cookie";
 import bcrypt from "bcryptjs";
 import { signinInputSchema, signupInputSchema } from "../zod/validation";
+import { authMiddleware } from "../middleware/authMiddleware";
 
 export const userRoute = new Hono<{
     Bindings: {
@@ -223,6 +224,33 @@ userRoute.get("/refresh_token", async (c) => {
             HttpStatus.INTERNAL_SERVER_ERROR
         );
     }
+});
+
+userRoute.get("/getProfile", authMiddleware, async (c) => {
+    const prisma = new PrismaClient({
+        datasourceUrl: c.env.DATABASE_URL,
+    }).$extends(withAccelerate());
+
+    //@ts-ignore
+    const userId = c.get("userId");
+    const response = await prisma.user.findUnique({
+        where: {
+            //@ts-ignore
+            id: userId,
+        },
+    });
+    if (!userId) {
+        return c.json(
+            {
+                message: "No User Id found",
+            },
+            HttpStatus.NOT_FOUND
+        );
+    }
+    return c.json({
+        name: response?.name,
+        email: response?.email,
+    });
 });
 
 userRoute.post("/logout", async (c) => {

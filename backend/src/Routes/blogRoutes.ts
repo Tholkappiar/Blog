@@ -127,7 +127,7 @@ blogRoute
             blogs,
         });
     })
-    .get("/getMyBlogs", setId, async (c) => {
+    .get("/getMyBlogs", authMiddleware, async (c) => {
         const prisma = new PrismaClient({
             datasourceUrl: c.env.DATABASE_URL,
         }).$extends(withAccelerate());

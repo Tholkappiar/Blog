@@ -1,10 +1,23 @@
 import { Hono } from "hono";
 import { userRoute } from "./Routes/userRoutes";
 import { blogRoute } from "./Routes/blogRoutes";
-import { authMiddleware } from "./middleware/authMiddleware";
 import { cors } from "hono/cors";
+import { cloudflareRateLimiter } from "@hono-rate-limiter/cloudflare";
 
-const app = new Hono();
+type AppType = {
+    Bindings: {
+        RATE_LIMITER: RateLimit;
+    };
+};
+
+const app = new Hono<AppType>();
+
+app.use(
+    cloudflareRateLimiter<AppType>({
+        rateLimitBinding: (c) => c.env.RATE_LIMITER, // Reference to RATE_LIMITER
+        keyGenerator: (c) => c.req.header("cf-connecting-ip") || "unknown", // Use IP for unique identification
+    })
+);
 
 app.use(
     "/api/*",
@@ -20,7 +33,6 @@ app.get("/", (c) => {
     });
 });
 
-// app.use("/api/v1/blog/*", authMiddleware);
 app.route("/api/v1/user", userRoute);
 app.route("/api/v1/blog", blogRoute);
 
