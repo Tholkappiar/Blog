@@ -32,4 +32,5 @@ model Post {
   author User @relation(references: [id] , fields: [authorId])
   authorId String
   createdAt DateTime @default(now())
+  views     Int      @default(0)
 }

@@ -109,10 +109,12 @@ blogRoute
             message: "Blog updated successfully",
         });
     })
-    .get("/getAllBlogs", async (c) => {
+    .get("/getAllBlogs", setId, async (c) => {
         const prisma = new PrismaClient({
             datasourceUrl: c.env.DATABASE_URL,
         }).$extends(withAccelerate());
+
+        const userId = c.get("userId");
         const blogs = await prisma.post.findMany({
             where: {
                 published: true,
@@ -123,8 +125,18 @@ blogRoute
             return c.json({ blogs: [] }, HttpStatus.OK);
         }
 
+        if (userId) {
+            return c.json({
+                blogs,
+            });
+        }
+        const blogsWithoutViews = blogs.map((blog) => {
+            const { views, ...blogWithoutViews } = blog;
+            return blogWithoutViews;
+        });
+
         return c.json({
-            blogs,
+            blogs: blogsWithoutViews,
         });
     })
     .get("/getMyBlogs", authMiddleware, async (c) => {
@@ -184,17 +196,39 @@ blogRoute
                 );
             }
         }
-        if (!blog) {
+        try {
+            async function incrementViewCount(postId: string) {
+                console.log(postId);
+                const post = await prisma.post.findUnique({
+                    where: { id: postId },
+                });
+                if (!post) {
+                    throw new Error("Post not found");
+                }
+
+                const updatedPost = await prisma.post.update({
+                    where: { id: postId },
+                    data: {
+                        views: post.views + 1,
+                    },
+                });
+
+                return updatedPost;
+            }
+
+            await incrementViewCount(blogId);
+            const responseBlog = userId ? blog : { ...blog, views: undefined };
+            return c.json({
+                blog: responseBlog,
+            });
+        } catch (error) {
             return c.json(
                 {
-                    message: "Blog not found.",
+                    message: "Error while updating the view count.",
                 },
-                HttpStatus.NOT_FOUND
+                500
             );
         }
-        return c.json({
-            blog,
-        });
     })
     .delete("/:id", authMiddleware, authorizePostAccess, async (c) => {
         const prisma = new PrismaClient({
