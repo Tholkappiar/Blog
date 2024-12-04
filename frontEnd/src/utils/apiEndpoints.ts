@@ -19,7 +19,7 @@ type ApiRoutes = {
 };
 
 export const API_ROUTES: ApiRoutes = {
-    BASE_URL: "https://blogbackend.tholkappiar.me",
+    BASE_URL: "https://blogbackend.tholkappiar.me/api/v1",
     USER: {
         LOGIN: "/user/signin",
         SIGNUP: "/user/signup",
