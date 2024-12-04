@@ -1,5 +1,5 @@
-export const REFRESH_TOKEN_EXPIRATION = 60 * 1; // 60 * 60 * 24 * 7
-export const ACCESS_TOKEN_EXPIRATION = 30;
+export const REFRESH_TOKEN_EXPIRATION = 60 * 60 * 24 * 7;
+export const ACCESS_TOKEN_EXPIRATION = 60 * 15;
 
 export enum HttpStatus {
     OK = 200,
