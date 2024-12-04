@@ -16,6 +16,7 @@ interface Blog {
     published: boolean;
     filterBlog: (id: string) => void;
     createdAt: string;
+    views: number;
 }
 
 const Blogs = () => {
@@ -87,6 +88,7 @@ const Blogs = () => {
                         filterBlog={filterBlog}
                         dateTime={blog.createdAt}
                         currentUserId={user.userId}
+                        views={blog?.views}
                     />
                 ))
             ) : (

@@ -15,6 +15,7 @@ interface BlogCardProps {
     dateTime: string;
     published: boolean;
     currentUserId: string | undefined;
+    views: number;
 }
 
 const BlogCard = ({
@@ -28,6 +29,7 @@ const BlogCard = ({
     filterBlog,
     currentUserId,
     authorId,
+    views,
 }: BlogCardProps) => {
     const extractedText = extractTextFromJSON(post);
     const readingTime = getReadingTime(extractedText);
@@ -59,6 +61,17 @@ const BlogCard = ({
                             <span className="mr-4 text-muted-foreground">
                                 {readingTime}
                             </span>
+
+                            {user.userId && (
+                                <>
+                                    <span className="mx-2 text-muted-foreground">
+                                        ·
+                                    </span>
+                                    <span className="mr-4 text-muted-foreground">
+                                        {views} views
+                                    </span>
+                                </>
+                            )}
                         </div>
                         <div className="flex flex-wrap gap-2 my-2">
                             {tags.map((tag) => (
