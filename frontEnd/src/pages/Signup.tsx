@@ -88,6 +88,8 @@ const Signup = () => {
                 setError("User already exists. Please log in instead.");
             } else if (status === HttpStatusCode.InternalServerError) {
                 setError("Something went wrong. Please try again later.");
+            } else if (status === HttpStatusCode.TooManyRequests) {
+                setError("Limit exceeded, try again after some time.");
             } else {
                 setError("Unexpected error occurred. Please try again.");
             }

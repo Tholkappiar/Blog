@@ -96,6 +96,8 @@ const Login = () => {
                 setError("Invalid email or password.");
             } else if (status === 404) {
                 setError("User not found. Please check your email.");
+            } else if (status === 429) {
+                setError("Limit exceeded, try again after some time.");
             } else {
                 setError("Something went wrong. Please try again later.");
             }

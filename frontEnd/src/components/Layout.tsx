@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
+import { Toaster } from "./ui/sonner";
 
 const Layout = () => {
     return (
@@ -8,6 +9,7 @@ const Layout = () => {
             <Header />
             <section className="flex-1 flex flex-col">
                 <Outlet />
+                <Toaster />
             </section>
             <Footer />
         </main>
