@@ -15,7 +15,7 @@ const app = new Hono<AppType>();
 app.use(
     "/api/*",
     cors({
-        origin: "http://localhost:5173",
+        origin: "https://blog.tholkappiar.me",
         credentials: true,
     })
 );
