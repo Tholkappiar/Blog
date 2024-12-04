@@ -13,17 +13,17 @@ type AppType = {
 const app = new Hono<AppType>();
 
 app.use(
-    cloudflareRateLimiter<AppType>({
-        rateLimitBinding: (c) => c.env.RATE_LIMITER, // Reference to RATE_LIMITER
-        keyGenerator: (c) => c.req.header("cf-connecting-ip") || "unknown", // Use IP for unique identification
-    })
-);
-
-app.use(
     "/api/*",
     cors({
         origin: "http://localhost:5173",
         credentials: true,
+    })
+);
+
+app.use(
+    cloudflareRateLimiter<AppType>({
+        rateLimitBinding: (c) => c.env.RATE_LIMITER, // Reference to RATE_LIMITER
+        keyGenerator: (c) => c.req.header("cf-connecting-ip") || "unknown", // Use IP for unique identification
     })
 );
 
