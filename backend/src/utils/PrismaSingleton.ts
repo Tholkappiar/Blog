@@ -9,7 +9,6 @@ export const getPrismaClient = (databaseUrl: string) => {
                 "Database URL is required to create a Prisma client."
             );
         }
-        console.log("------------ new prisma client generated -------------");
         //@ts-ignore
         prisma = new PrismaClient({
             datasourceUrl: databaseUrl,

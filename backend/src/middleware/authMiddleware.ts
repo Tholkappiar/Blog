@@ -12,7 +12,7 @@ export async function authMiddleware(c: Context, next: Next) {
             {
                 message: "Invalid Authorization format",
             },
-            401
+            HttpStatus.UNAUTHORIZED
         );
     try {
         const jwtVerify = await verify(jwt, SECRET_KEY);
@@ -21,7 +21,7 @@ export async function authMiddleware(c: Context, next: Next) {
                 {
                     message: "UnAuthorized request",
                 },
-                401
+                HttpStatus.UNAUTHORIZED
             );
         c.set("userId", jwtVerify.userId);
         await next();
@@ -30,7 +30,7 @@ export async function authMiddleware(c: Context, next: Next) {
             {
                 message: "Invalid or Expired Token",
             },
-            401
+            HttpStatus.UNAUTHORIZED
         );
     }
 }
