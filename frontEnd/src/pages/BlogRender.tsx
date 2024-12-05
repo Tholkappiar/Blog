@@ -9,7 +9,6 @@ interface BlogProps {
 }
 
 const BlogRender: React.FC<BlogProps> = ({ post }) => {
-    console.log(post);
     const editor = useEditor({
         content: JSON.parse(post),
         extensions,

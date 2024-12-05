@@ -23,7 +23,6 @@ const useAxiosPrivate = () => {
     }
 
     function handleLogout() {
-        console.log("logging oti ");
         toast("Session Expired", {
             description: `Logging out, Please re-login again.`,
             action: {

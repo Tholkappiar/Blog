@@ -57,9 +57,7 @@ const Blogs = () => {
 
     if (error) {
         return (
-            <div className="text-center text-destructive-foreground">
-                Error: {error}
-            </div>
+            <div className="text-center text-foreground">Error: {error}</div>
         );
     }
 

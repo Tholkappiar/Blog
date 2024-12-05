@@ -3,7 +3,6 @@ import useAuth from "../hooks/useAuth";
 
 const RequireAuth = () => {
     const { user } = useAuth();
-    console.log(user);
     const location = useLocation();
     return user?.token ? (
         <Outlet />

@@ -11,6 +11,11 @@ import NotFound from "./pages/NotFound";
 import EditorPage from "./pages/EditorPage";
 import { EditorProviderContext } from "./context/EditorContext";
 import { ThemeProvider } from "./context/ThemeProvider";
+import { disableReactDevTools } from "@fvilers/disable-react-devtools";
+
+if (process.env.NODE_ENV === "production") {
+    disableReactDevTools();
+}
 
 function App() {
     return (

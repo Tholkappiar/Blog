@@ -107,7 +107,6 @@ const EditorPage = () => {
     useEffect(() => {
         if (flag && editor && editorState.post) {
             editor.commands.setContent(JSON.parse(editorState.post));
-            console.log("expensive");
             setFlag(false);
         }
     }, [editor, editorState.post, flag]);
