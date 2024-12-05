@@ -90,13 +90,13 @@ const Login = () => {
             }
         } catch (err: any) {
             const status = err.response?.status;
-            if (status === 400) {
+            if (status === HttpStatusCode.BadRequest) {
                 setError("Invalid input. Please try again.");
-            } else if (status === 401) {
+            } else if (status === HttpStatusCode.Unauthorized) {
                 setError("Invalid email or password.");
-            } else if (status === 404) {
+            } else if (status === HttpStatusCode.NotFound) {
                 setError("User not found. Please check your email.");
-            } else if (status === 429) {
+            } else if (status === HttpStatusCode.TooManyRequests) {
                 setError("Limit exceeded, try again after some time.");
             } else {
                 setError("Something went wrong. Please try again later.");
