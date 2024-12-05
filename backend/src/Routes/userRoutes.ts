@@ -15,6 +15,7 @@ export const userRoute = new Hono<{
     Bindings: {
         DATABASE_URL: string;
         SECRET_KEY: string;
+        REFRESH_SECRET_KEY: string;
     };
 }>();
 
@@ -86,7 +87,7 @@ userRoute.post("/signup", async (c) => {
         );
         const refreshToken = await generateToken(
             { userId: response.id },
-            c.env.SECRET_KEY,
+            c.env.REFRESH_SECRET_KEY,
             "refresh"
         );
 
@@ -172,7 +173,7 @@ userRoute.post("/signin", async (c) => {
         );
         const refreshToken = await generateToken(
             { userId: user.id },
-            c.env.SECRET_KEY,
+            c.env.REFRESH_SECRET_KEY,
             "refresh"
         );
 
@@ -211,7 +212,10 @@ userRoute.get("/refresh_token", async (c) => {
     }
 
     try {
-        const payload = await verifyToken(refreshToken, c.env.SECRET_KEY);
+        const payload = await verifyToken(
+            refreshToken,
+            c.env.REFRESH_SECRET_KEY
+        );
 
         if (!payload) {
             return c.json(
