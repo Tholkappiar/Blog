@@ -1,6 +1,4 @@
 import { Context, Hono, Next } from "hono";
-import { PrismaClient } from "@prisma/client/edge";
-import { withAccelerate } from "@prisma/extension-accelerate";
 import { HttpStatus } from "../utils/utils";
 import {
     authMiddleware,
@@ -11,6 +9,7 @@ import {
     createPostInputSchema,
     updatePostInputSchema,
 } from "../zod/validation";
+import { getPrismaClient } from "../utils/PrismaSingleton";
 
 export const blogRoute = new Hono<{
     Bindings: {
@@ -24,9 +23,15 @@ export const blogRoute = new Hono<{
 
 blogRoute
     .post("/", authMiddleware, async (c) => {
-        const prisma = new PrismaClient({
-            datasourceUrl: c.env.DATABASE_URL,
-        }).$extends(withAccelerate());
+        const prisma = getPrismaClient(c.env.DATABASE_URL);
+        if (!prisma) {
+            return c.json(
+                {
+                    message: "Failed to initialize the Prisma client.",
+                },
+                HttpStatus.INTERNAL_SERVER_ERROR
+            );
+        }
 
         const { title, post, tags, excerpt } = await c.req.json();
         const id = c.get("userId");
@@ -66,9 +71,15 @@ blogRoute
         );
     })
     .put("/:id", authMiddleware, authorizePostAccess, async (c) => {
-        const prisma = new PrismaClient({
-            datasourceUrl: c.env.DATABASE_URL,
-        }).$extends(withAccelerate());
+        const prisma = getPrismaClient(c.env.DATABASE_URL);
+        if (!prisma) {
+            return c.json(
+                {
+                    message: "Failed to initialize the Prisma client.",
+                },
+                HttpStatus.INTERNAL_SERVER_ERROR
+            );
+        }
 
         const body = await c.req.json();
         const id = c.req.param("id");
@@ -110,10 +121,15 @@ blogRoute
         });
     })
     .get("/getAllBlogs", setId, async (c) => {
-        const prisma = new PrismaClient({
-            datasourceUrl: c.env.DATABASE_URL,
-        }).$extends(withAccelerate());
-
+        const prisma = getPrismaClient(c.env.DATABASE_URL);
+        if (!prisma) {
+            return c.json(
+                {
+                    message: "Failed to initialize the Prisma client.",
+                },
+                HttpStatus.INTERNAL_SERVER_ERROR
+            );
+        }
         const userId = c.get("userId");
         const blogs = await prisma.post.findMany({
             where: {
@@ -140,9 +156,15 @@ blogRoute
         });
     })
     .get("/getMyBlogs", authMiddleware, async (c) => {
-        const prisma = new PrismaClient({
-            datasourceUrl: c.env.DATABASE_URL,
-        }).$extends(withAccelerate());
+        const prisma = getPrismaClient(c.env.DATABASE_URL);
+        if (!prisma) {
+            return c.json(
+                {
+                    message: "Failed to initialize the Prisma client.",
+                },
+                HttpStatus.INTERNAL_SERVER_ERROR
+            );
+        }
         const userId = c.get("userId");
         let blogs;
         if (!userId) {
@@ -161,9 +183,15 @@ blogRoute
         });
     })
     .get("/:id", setId, async (c) => {
-        const prisma = new PrismaClient({
-            datasourceUrl: c.env.DATABASE_URL,
-        }).$extends(withAccelerate());
+        const prisma = getPrismaClient(c.env.DATABASE_URL);
+        if (!prisma) {
+            return c.json(
+                {
+                    message: "Failed to initialize the Prisma client.",
+                },
+                HttpStatus.INTERNAL_SERVER_ERROR
+            );
+        }
 
         const blogId = c.req.param("id");
         const userId = c.get("userId");
@@ -199,6 +227,14 @@ blogRoute
         try {
             async function incrementViewCount(postId: string) {
                 console.log(postId);
+                if (!prisma) {
+                    return c.json(
+                        {
+                            message: "Failed to initialize the Prisma client.",
+                        },
+                        HttpStatus.INTERNAL_SERVER_ERROR
+                    );
+                }
                 const post = await prisma.post.findUnique({
                     where: { id: postId },
                 });
@@ -231,9 +267,15 @@ blogRoute
         }
     })
     .delete("/:id", authMiddleware, authorizePostAccess, async (c) => {
-        const prisma = new PrismaClient({
-            datasourceUrl: c.env.DATABASE_URL,
-        }).$extends(withAccelerate());
+        const prisma = getPrismaClient(c.env.DATABASE_URL);
+        if (!prisma) {
+            return c.json(
+                {
+                    message: "Failed to initialize the Prisma client.",
+                },
+                HttpStatus.INTERNAL_SERVER_ERROR
+            );
+        }
 
         const blogId = c.req.param("id");
         // Validate ID
@@ -256,9 +298,15 @@ blogRoute
         });
     })
     .post("/:id", authMiddleware, authorizePostAccess, async (c) => {
-        const prisma = new PrismaClient({
-            datasourceUrl: c.env.DATABASE_URL,
-        }).$extends(withAccelerate());
+        const prisma = getPrismaClient(c.env.DATABASE_URL);
+        if (!prisma) {
+            return c.json(
+                {
+                    message: "Failed to initialize the Prisma client.",
+                },
+                HttpStatus.INTERNAL_SERVER_ERROR
+            );
+        }
         const blogId = c.req.param("id");
         try {
             const blog = await prisma.post.findUnique({
@@ -300,9 +348,15 @@ blogRoute
 
 // Function to validate post ID
 async function validatePostId(c: Context, postId: string) {
-    const prisma = new PrismaClient({
-        datasourceUrl: c.env.DATABASE_URL,
-    }).$extends(withAccelerate());
+    const prisma = getPrismaClient(c.env.DATABASE_URL);
+    if (!prisma) {
+        return c.json(
+            {
+                message: "Failed to initialize the Prisma client.",
+            },
+            HttpStatus.INTERNAL_SERVER_ERROR
+        );
+    }
     const post = await prisma.post.findUnique({
         where: { id: postId },
     });

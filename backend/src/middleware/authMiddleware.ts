@@ -1,8 +1,7 @@
 import { Context, Next } from "hono";
 import { verify } from "hono/jwt";
 import { HttpStatus } from "../utils/utils";
-import { PrismaClient } from "@prisma/client/edge";
-import { withAccelerate } from "@prisma/extension-accelerate";
+import { getPrismaClient } from "../utils/PrismaSingleton";
 
 export async function authMiddleware(c: Context, next: Next) {
     const SECRET_KEY = c.env.SECRET_KEY;
@@ -68,9 +67,15 @@ export async function authorizePostAccess(c: Context, next: Next) {
     const userId = c.get("userId");
     const id = c.req.param("id");
 
-    const prisma = new PrismaClient({
-        datasourceUrl: c.env.DATABASE_URL,
-    }).$extends(withAccelerate());
+    const prisma = getPrismaClient(c.env.DATABASE_URL);
+    if (!prisma) {
+        return c.json(
+            {
+                message: "Failed to initialize the Prisma client.",
+            },
+            HttpStatus.INTERNAL_SERVER_ERROR
+        );
+    }
 
     if (!userId)
         return c.json(

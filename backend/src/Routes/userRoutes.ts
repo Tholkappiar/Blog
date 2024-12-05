@@ -1,6 +1,4 @@
 import { Hono } from "hono";
-import { PrismaClient } from "@prisma/client/edge";
-import { withAccelerate } from "@prisma/extension-accelerate";
 import { sign, verify } from "hono/jwt";
 import {
     ACCESS_TOKEN_EXPIRATION,
@@ -11,6 +9,7 @@ import { getCookie, setCookie } from "hono/cookie";
 import bcrypt from "bcryptjs";
 import { signinInputSchema, signupInputSchema } from "../zod/validation";
 import { authMiddleware } from "../middleware/authMiddleware";
+import { getPrismaClient } from "../utils/PrismaSingleton";
 
 export const userRoute = new Hono<{
     Bindings: {
@@ -20,9 +19,15 @@ export const userRoute = new Hono<{
 }>();
 
 userRoute.post("/signup", async (c) => {
-    const prisma = new PrismaClient({
-        datasourceUrl: c.env.DATABASE_URL,
-    }).$extends(withAccelerate());
+    const prisma = getPrismaClient(c.env.DATABASE_URL);
+    if (!prisma) {
+        return c.json(
+            {
+                message: "Failed to initialize the Prisma client.",
+            },
+            HttpStatus.INTERNAL_SERVER_ERROR
+        );
+    }
 
     try {
         const { name, email, password } = await c.req.json();
@@ -111,10 +116,15 @@ userRoute.post("/signup", async (c) => {
 });
 
 userRoute.post("/signin", async (c) => {
-    const prisma = new PrismaClient({
-        datasourceUrl: c.env.DATABASE_URL,
-    }).$extends(withAccelerate());
-
+    const prisma = getPrismaClient(c.env.DATABASE_URL);
+    if (!prisma) {
+        return c.json(
+            {
+                message: "Failed to initialize the Prisma client.",
+            },
+            HttpStatus.INTERNAL_SERVER_ERROR
+        );
+    }
     try {
         const { email, password } = await c.req.json();
         const validation = signinInputSchema.safeParse({
@@ -227,9 +237,15 @@ userRoute.get("/refresh_token", async (c) => {
 });
 
 userRoute.get("/getProfile", authMiddleware, async (c) => {
-    const prisma = new PrismaClient({
-        datasourceUrl: c.env.DATABASE_URL,
-    }).$extends(withAccelerate());
+    const prisma = getPrismaClient(c.env.DATABASE_URL);
+    if (!prisma) {
+        return c.json(
+            {
+                message: "Failed to initialize the Prisma client.",
+            },
+            HttpStatus.INTERNAL_SERVER_ERROR
+        );
+    }
 
     //@ts-ignore
     const userId = c.get("userId");
