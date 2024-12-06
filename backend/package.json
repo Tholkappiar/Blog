@@ -2,7 +2,7 @@
     "name": "server",
     "scripts": {
         "dev": "wrangler dev",
-        "deploy": "wrangler deploy dist/index.js",
+        "deploy": "npx wrangler publish",
         "build": "tsc"
     },
     "dependencies": {
