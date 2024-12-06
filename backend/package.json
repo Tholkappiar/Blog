@@ -2,7 +2,8 @@
     "name": "server",
     "scripts": {
         "dev": "wrangler dev",
-        "deploy": "wrangler deploy --minify"
+        "deploy": "wrangler deploy --minify",
+        "build": "tsc"
     },
     "dependencies": {
         "@hono-rate-limiter/cloudflare": "^0.2.1",
