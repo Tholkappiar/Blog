@@ -11,6 +11,7 @@ const Signup = () => {
         email: string;
         password: string;
         confirmPassword: string;
+        passkey: string;
     };
 
     const [newUser, setNewUser] = useState<NewUser>({
@@ -18,6 +19,7 @@ const Signup = () => {
         email: "",
         password: "",
         confirmPassword: "",
+        passkey: "",
     });
 
     const [error, setError] = useState<string | null>(null);
@@ -70,6 +72,7 @@ const Signup = () => {
                     name: newUser.username,
                     email: newUser.email,
                     password: newUser.password,
+                    passkey: newUser.passkey,
                 }
             );
 
@@ -81,18 +84,9 @@ const Signup = () => {
                 navigate(from, { replace: true });
             }
         } catch (err: any) {
-            const status = err.response?.status;
-            if (status === HttpStatusCode.BadRequest) {
-                setError("Invalid input. Please check your details.");
-            } else if (status === HttpStatusCode.Conflict) {
-                setError("User already exists. Please log in instead.");
-            } else if (status === HttpStatusCode.InternalServerError) {
-                setError("Something went wrong. Please try again later.");
-            } else if (status === HttpStatusCode.TooManyRequests) {
-                setError("Limit exceeded, try again after some time.");
-            } else {
-                setError("Unexpected error occurred. Please try again.");
-            }
+            // const status = err.response?.status;
+            const error = err.response.data.message;
+            setError(error);
         } finally {
             setIsLoading(false);
         }
@@ -176,6 +170,21 @@ const Signup = () => {
                             onChange={handleChange}
                             className="border-divider border-2 rounded-md px-1 py-2 sm:p-2 my-2 outline-none text-black text-sm"
                             placeholder="Confirm Password"
+                        />
+                        <label
+                            htmlFor="passKey"
+                            className="font-semibold text-sm text-foreground"
+                        >
+                            Pass Key
+                        </label>
+                        <input
+                            id="passKey"
+                            name="passkey"
+                            type="text"
+                            value={newUser.passkey}
+                            onChange={handleChange}
+                            className="border-divider border-2 rounded-md px-1 py-2 sm:p-2 my-2 outline-none text-black text-sm"
+                            placeholder="Enter Passkey"
                         />
                         <p className="text-secondary-foreground mt-4 text-center font-medium text-sm">
                             Already have an Account?{" "}

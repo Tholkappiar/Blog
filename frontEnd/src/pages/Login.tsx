@@ -71,8 +71,9 @@ const Login = () => {
         if (!validateInputs()) return;
 
         setIsLoading(true);
+        let loginResponse;
         try {
-            const loginResponse = await axiosInstance.post(
+            loginResponse = await axiosInstance.post(
                 API_ROUTES.USER.LOGIN,
                 {
                     email: userLogin.email,
@@ -89,18 +90,9 @@ const Login = () => {
                 navigate(from, { replace: true });
             }
         } catch (err: any) {
-            const status = err.response?.status;
-            if (status === HttpStatusCode.BadRequest) {
-                setError("Invalid input. Please try again.");
-            } else if (status === HttpStatusCode.Unauthorized) {
-                setError("Invalid email or password.");
-            } else if (status === HttpStatusCode.NotFound) {
-                setError("User not found. Please check your email.");
-            } else if (status === HttpStatusCode.TooManyRequests) {
-                setError("Limit exceeded, try again after some time.");
-            } else {
-                setError("Something went wrong. Please try again later.");
-            }
+            // const status = err.response?.status;
+            const error = err.response.data.message;
+            setError(error);
         } finally {
             setIsLoading(false);
         }

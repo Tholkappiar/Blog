@@ -226,7 +226,6 @@ blogRoute
         }
         try {
             async function incrementViewCount(postId: string) {
-                console.log(postId);
                 if (!prisma) {
                     return c.json(
                         {

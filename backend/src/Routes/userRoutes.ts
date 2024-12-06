@@ -16,6 +16,7 @@ export const userRoute = new Hono<{
         DATABASE_URL: string;
         SECRET_KEY: string;
         REFRESH_SECRET_KEY: string;
+        PASS_KEY: string;
     };
 }>();
 
@@ -31,17 +32,27 @@ userRoute.post("/signup", async (c) => {
     }
 
     try {
-        const { name, email, password } = await c.req.json();
+        const { name, email, password, passkey } = await c.req.json();
         const validation = signupInputSchema.safeParse({
             name,
             email,
             password,
+            passkey,
         });
 
         if (!validation.success) {
             return c.json(
                 {
                     message: validation.error.errors[0].message,
+                },
+                HttpStatus.BAD_REQUEST
+            );
+        }
+
+        if (passkey !== c.env.PASS_KEY) {
+            return c.json(
+                {
+                    message: "Invalid Passkey",
                 },
                 HttpStatus.BAD_REQUEST
             );
@@ -152,7 +163,7 @@ userRoute.post("/signin", async (c) => {
         if (!user) {
             return c.json(
                 {
-                    message: "User not Found",
+                    message: "User not found. Please check your email.",
                 },
                 HttpStatus.NOT_FOUND
             );
