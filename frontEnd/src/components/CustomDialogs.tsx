@@ -118,8 +118,6 @@ export const ProfileDialog: React.FC<ProfileDialogProps> = ({
                 ...prev,
                 username: response.data.name,
             }));
-
-            console.log(response.data);
         } catch (error) {
             console.error("Error fetching profile information", error);
         }

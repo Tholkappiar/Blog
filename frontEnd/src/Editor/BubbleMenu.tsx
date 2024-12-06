@@ -3,6 +3,7 @@ import { Editor, BubbleMenu } from "@tiptap/react";
 interface BubbleBarProps {
     editor: Editor | null;
 }
+
 export const BubbleBar: React.FC<BubbleBarProps> = ({ editor }) => {
     if (!editor) return null;
 

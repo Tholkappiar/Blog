@@ -19,7 +19,10 @@ type ApiRoutes = {
 };
 
 export const API_ROUTES: ApiRoutes = {
-    BASE_URL: "https://blogbackend.tholkappiar.me/api/v1",
+    BASE_URL:
+        process.env.NODE_ENV === "production"
+            ? "https://blogbackend.tholkappiar.me/api/v1"
+            : "http://localhost:8787/api/v1",
     USER: {
         LOGIN: "/user/signin",
         SIGNUP: "/user/signup",

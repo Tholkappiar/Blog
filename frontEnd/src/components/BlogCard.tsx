@@ -3,6 +3,7 @@ import { BlogCardDropDown } from "./BlogDropDown";
 import { format } from "date-fns";
 import { extractTextFromJSON, getReadingTime } from "@/utils/blogUtils";
 import useAuth from "@/hooks/useAuth";
+import { memo } from "react";
 
 interface BlogCardProps {
     title: string;
@@ -99,4 +100,4 @@ const BlogCard = ({
     );
 };
 
-export default BlogCard;
+export default memo(BlogCard);

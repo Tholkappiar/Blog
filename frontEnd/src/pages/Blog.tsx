@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import BlogDisplay from "../components/BlogDisplay";
 import { BlogFullShimmer } from "../components/BlogShimmerEffects";
@@ -63,4 +63,4 @@ const Blog = () => {
     );
 };
 
-export default Blog;
+export default memo(Blog);

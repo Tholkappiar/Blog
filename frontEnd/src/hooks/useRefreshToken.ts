@@ -13,7 +13,6 @@ const useRefreshToken = () => {
             });
             const { data } = await refreshAxios.get(API_ROUTES.REFRESH_TOKEN);
             setUser({ token: data.token, userId: data.userId });
-            console.log("New token:", data.token);
             return data.token;
         } catch (error) {
             console.error("Error refreshing token:", error);

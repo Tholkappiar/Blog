@@ -11,7 +11,7 @@ const BlogDisplay = ({
     createdAt: string | undefined;
 }) => {
     return (
-        <div className="sm:p-4 py-8 mt-8 font-mono">
+        <div className="sm:p-4 py-8 lg:mt-8 font-mono">
             <div className="text-2xl sm:text-3xl font-semibold text-foreground">
                 {title || "Untitled"}
             </div>

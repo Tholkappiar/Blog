@@ -101,7 +101,7 @@ const Header = () => {
                         Th
                     </p>
                 </Link>
-                <div className="flex items-center justify-center space-x-2 sm:space-x-8">
+                <div className="flex items-center justify-center gap-4 sm:gap-8">
                     <div className="flex items-center gap-1 sm:gap-4">
                         {user.token && isEditorPage && (
                             <button

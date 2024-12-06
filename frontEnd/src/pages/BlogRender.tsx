@@ -1,6 +1,7 @@
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import "../styles/EditorPage.css";
+import { memo } from "react";
 
 const extensions = [StarterKit];
 
@@ -23,4 +24,4 @@ const BlogRender: React.FC<BlogProps> = ({ post }) => {
     );
 };
 
-export default BlogRender;
+export default memo(BlogRender);
